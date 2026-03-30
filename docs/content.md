@@ -504,7 +504,7 @@ $stream = $pending->getNotificationStream();
 
 $read = [$stream];
 $write = $except = [];
-stream_select($read, $write, $except, timeout_seconds: 30);
+stream_select($read, $write, $except, 30, 0);
 
 $document = $pending->join();
 ```
