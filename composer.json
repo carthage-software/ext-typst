@@ -1,0 +1,33 @@
+{
+  "name": "carthage-software/ext-typst",
+  "description": "PHP extension for the Typst typesetting engine",
+  "type": "php-ext",
+  "license": [
+    "MIT",
+    "Apache-2.0"
+  ],
+  "php-ext": {
+    "extension-name": "typst",
+    "priority": 80,
+    "support-zts": true,
+    "support-nts": true,
+    "os-families-exclude": [
+      "windows"
+    ],
+    "download-url-method": [
+      "pre-packaged-binary"
+    ]
+  },
+  "require": {
+    "php": "~8.3.0 || ~8.4.0 || ~8.5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0",
+    "carthage-software/mago": "^1.16.0",
+    "php-standard-library/async": "^6.1",
+    "php-standard-library/file": "^6.1",
+    "php-standard-library/io": "^6.1",
+    "php-standard-library/json": "^6.1",
+    "php-standard-library/str": "^6.1"
+  }
+}

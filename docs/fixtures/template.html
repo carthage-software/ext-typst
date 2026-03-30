@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ext-typst &mdash; Typst for PHP</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github.min.css"
+        />
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --cream: #fdf6e3;
+                --cream-dark: #f5e6c8;
+                --cream-darker: #e8d5a9;
+                --ink: #2d2a24;
+                --ink-light: #5c564a;
+                --ink-lighter: #8a8279;
+                --accent: #e07934;
+                --accent-soft: #f4a261;
+                --accent-bg: #fef3e6;
+                --green: #6b9e78;
+                --green-bg: #f0f7f1;
+                --blue: #5a7fb5;
+                --blue-bg: #eef3fa;
+                --border: #d4c9b0;
+                --radius: 0px;
+                --radius-sm: 0px;
+                --code-bg: #faf5eb;
+            }
+
+            html {
+                scroll-behavior: smooth;
+            }
+
+            body {
+                font-family:
+                    "Space Grotesk",
+                    -apple-system,
+                    system-ui,
+                    sans-serif;
+                background: var(--cream);
+                color: var(--ink);
+                line-height: 1.7;
+                font-size: 16px;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .site-header {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--cream);
+                border-bottom: 2px solid var(--border);
+                padding: 0 2rem;
+                backdrop-filter: blur(8px);
+                background: rgba(253, 246, 227, 0.92);
+            }
+
+            .header-inner {
+                max-width: 900px;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 60px;
+            }
+
+            .logo {
+                font-weight: 700;
+                font-size: 1.25rem;
+                color: var(--ink);
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .logo-tag {
+                font-family: "Space Mono", monospace;
+                font-size: 0.7rem;
+                font-weight: 400;
+                background: var(--accent);
+                color: var(--cream);
+                padding: 2px 8px;
+                border-radius: 0;
+                letter-spacing: 0.02em;
+            }
+
+            .header-links {
+                display: flex;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .header-links a {
+                color: var(--ink-light);
+                text-decoration: none;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: color 0.15s;
+            }
+
+            .header-links a:hover {
+                color: var(--accent);
+            }
+
+            .page-layout {
+                max-width: 1160px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 220px 1fr;
+                gap: 3rem;
+                padding: 2rem;
+                align-items: start;
+            }
+
+            .sidebar {
+                position: sticky;
+                top: 80px;
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+                padding-right: 1rem;
+            }
+
+            .sidebar nav {
+                display: flex;
+                flex-direction: column;
+                gap: 0.2rem;
+            }
+
+            .sidebar a {
+                color: var(--ink-light);
+                text-decoration: none;
+                font-size: 0.85rem;
+                padding: 0.3rem 0.75rem;
+                border-radius: var(--radius-sm);
+                transition: all 0.15s;
+                border-left: 2px solid transparent;
+            }
+
+            .sidebar a:hover {
+                color: var(--ink);
+                background: var(--cream-dark);
+            }
+
+            .sidebar a.active {
+                color: var(--accent);
+                border-left-color: var(--accent);
+                font-weight: 600;
+            }
+
+            .sidebar .nav-heading {
+                font-size: 0.7rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: var(--ink-lighter);
+                padding: 1rem 0.75rem 0.3rem;
+            }
+
+            .sidebar .nav-heading:first-child {
+                padding-top: 0;
+            }
+
+            .content {
+                min-width: 0;
+                padding-bottom: 6rem;
+            }
+
+            .content > h1:first-child {
+                font-size: 2.8rem;
+                font-weight: 700;
+                line-height: 1.15;
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+                letter-spacing: -0.02em;
+            }
+
+            .content > h1:first-child + p {
+                font-size: 1.15rem;
+                color: var(--ink-light);
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            }
+
+            .content > h1:first-child + p + p {
+                font-size: 0.95rem;
+                color: var(--ink-lighter);
+                margin-bottom: 2rem;
+            }
+
+            .content h1,
+            .content h2,
+            .content h3 {
+                scroll-margin-top: 80px;
+            }
+
+            .content h1 {
+                font-size: 2rem;
+                font-weight: 700;
+                margin-top: 3.5rem;
+                margin-bottom: 1rem;
+                letter-spacing: -0.01em;
+                padding-bottom: 0.5rem;
+                border-bottom: 2px solid var(--border);
+            }
+
+            .content h2 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin-top: 2.5rem;
+                margin-bottom: 0.75rem;
+                letter-spacing: -0.01em;
+            }
+
+            .content h3 {
+                font-size: 1.15rem;
+                font-weight: 600;
+                margin-top: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .content p {
+                margin-bottom: 1rem;
+            }
+
+            .content a {
+                color: var(--accent);
+                text-decoration: underline;
+                text-decoration-color: var(--accent-soft);
+                text-underline-offset: 2px;
+                transition: text-decoration-color 0.15s;
+            }
+
+            .content a:hover {
+                text-decoration-color: var(--accent);
+            }
+
+            .content strong {
+                font-weight: 600;
+            }
+
+            .content hr {
+                border: none;
+                border-top: 2px solid var(--border);
+                margin: 2.5rem 0;
+            }
+
+            .content ul,
+            .content ol {
+                margin-bottom: 1rem;
+                padding-left: 1.5rem;
+            }
+
+            .content li {
+                margin-bottom: 0.35rem;
+            }
+
+            .content li::marker {
+                color: var(--accent-soft);
+            }
+
+            .content code {
+                font-family: "Space Mono", "SF Mono", "Fira Code", monospace;
+                font-size: 0.85em;
+                background: var(--code-bg);
+                border: 1px solid var(--border);
+                padding: 0.15em 0.4em;
+                border-radius: 0;
+                color: var(--ink);
+            }
+
+            .content pre {
+                background: var(--code-bg);
+                border: 2px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.25rem 1.5rem;
+                margin-bottom: 1.25rem;
+                overflow-x: auto;
+                position: relative;
+            }
+
+            .content pre code {
+                background: none;
+                border: none;
+                padding: 0;
+                font-size: 0.85rem;
+                line-height: 1.65;
+                border-radius: 0;
+            }
+
+            .content pre .lang-label {
+                position: absolute;
+                top: 0.5rem;
+                right: 0.75rem;
+                font-family: "Space Mono", monospace;
+                font-size: 0.65rem;
+                color: var(--ink-lighter);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                user-select: none;
+            }
+
+            .content table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                margin-bottom: 1.5rem;
+                border: 2px solid var(--border);
+                border-radius: var(--radius);
+                overflow: hidden;
+            }
+
+            .content th {
+                background: var(--cream-dark);
+                font-weight: 600;
+                font-size: 0.85rem;
+                text-align: left;
+                padding: 0.75rem 1rem;
+                border-bottom: 2px solid var(--border);
+            }
+
+            .content td {
+                padding: 0.65rem 1rem;
+                border-bottom: 1px solid var(--cream-dark);
+                font-size: 0.9rem;
+            }
+
+            .content tr:last-child td {
+                border-bottom: none;
+            }
+
+            .content tbody tr:hover {
+                background: var(--cream-dark);
+            }
+
+            .content blockquote {
+                background: var(--accent-bg);
+                border-left: 4px solid var(--accent);
+                border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+                padding: 1rem 1.25rem;
+                margin-bottom: 1rem;
+            }
+
+            .content blockquote p:last-child {
+                margin-bottom: 0;
+            }
+
+            .tabs {
+                margin-bottom: 1.5rem;
+            }
+
+            .tab-buttons {
+                display: flex;
+                gap: 0;
+                border-bottom: 2px solid var(--border);
+            }
+
+            .tab-button {
+                font-family: "Space Mono", monospace;
+                font-size: 0.8rem;
+                padding: 0.5rem 1.25rem;
+                background: none;
+                border: 2px solid transparent;
+                border-bottom: none;
+                color: var(--ink-lighter);
+                cursor: pointer;
+                transition: all 0.15s;
+                margin-bottom: -2px;
+            }
+
+            .tab-button:hover {
+                color: var(--ink);
+                background: var(--cream-dark);
+            }
+
+            .tab-button.active {
+                color: var(--ink);
+                background: var(--code-bg);
+                border-color: var(--border);
+                font-weight: 700;
+            }
+
+            .tab-panel {
+                display: none;
+            }
+
+            .tab-panel.active {
+                display: block;
+            }
+
+            .tab-panel pre {
+                border-top: none;
+                margin-top: 0;
+            }
+
+            .card-output {
+                border: 2px solid var(--border);
+                background: white;
+                padding: 0;
+                margin-bottom: 1.5rem;
+                overflow: auto;
+                max-height: 800px;
+            }
+
+            .card-output svg {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+
+            .site-footer {
+                border-top: 2px solid var(--border);
+                padding: 2rem;
+                text-align: center;
+                color: var(--ink-lighter);
+                font-size: 0.85rem;
+            }
+
+            .site-footer a {
+                color: var(--accent);
+                text-decoration: none;
+            }
+
+            @media (max-width: 768px) {
+                .page-layout {
+                    grid-template-columns: 1fr;
+                    padding: 1rem;
+                    gap: 0;
+                }
+
+                .sidebar {
+                    position: static;
+                    max-height: none;
+                    border-bottom: 2px solid var(--border);
+                    padding-bottom: 1rem;
+                    margin-bottom: 2rem;
+                    padding-right: 0;
+                }
+
+                .sidebar nav {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    gap: 0.25rem;
+                }
+
+                .sidebar a {
+                    border-left: none;
+                    border-bottom: 2px solid transparent;
+                    font-size: 0.8rem;
+                    padding: 0.25rem 0.5rem;
+                }
+
+                .sidebar a.active {
+                    border-left: none;
+                    border-bottom-color: var(--accent);
+                }
+
+                .sidebar .nav-heading {
+                    width: 100%;
+                    padding: 0.5rem 0.5rem 0.15rem;
+                }
+
+                .content > h1:first-child {
+                    font-size: 2rem;
+                }
+
+                .header-inner {
+                    height: 50px;
+                }
+            }
+
+            .sidebar::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .sidebar::-webkit-scrollbar-thumb {
+                background: var(--border);
+                border-radius: 0;
+            }
+
+            pre::-webkit-scrollbar {
+                height: 4px;
+            }
+
+            pre::-webkit-scrollbar-thumb {
+                background: var(--border);
+                border-radius: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="header-inner">
+                <a href="#" class="logo">
+                    ext-typst <span class="logo-tag">PHP</span>
+                </a>
+                <div class="header-links">
+                    <a
+                        href="https://carthage.software/en/"
+                        target="_blank"
+                        rel="noopener"
+                        >Carthage Software</a
+                    >
+                    <a
+                        href="https://github.com/carthage-software/ext-typst"
+                        target="_blank"
+                        rel="noopener"
+                        >GitHub</a
+                    >
+                    <a
+                        href="https://typst.app/docs/"
+                        target="_blank"
+                        rel="noopener"
+                        >Typst Docs</a
+                    >
+                </div>
+            </div>
+        </header>
+
+        <div class="page-layout">
+            <aside class="sidebar" id="sidebar"></aside>
+            <main class="content" id="content"></main>
+        </div>
+
+        <footer class="site-footer">
+            ext-typst &mdash; Made by
+            <a
+                href="https://carthage.software/en/"
+                target="_blank"
+                rel="noopener"
+                >Carthage Software</a
+            >
+            &mdash; MIT OR Apache-2.0 &mdash;
+            <a
+                href="https://github.com/carthage-software/ext-typst"
+                target="_blank"
+                rel="noopener"
+                >GitHub</a
+            >
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/languages/php.min.js"></script>
+        <script>
+            const MARKDOWN = {{MARKDOWN_CONTENT}};
+
+            marked.setOptions({
+                gfm: true,
+                breaks: false,
+                highlight: function(code, lang) {
+                    if (lang && hljs.getLanguage(lang)) {
+                        return hljs.highlight(code, { language: lang }).value;
+                    }
+                    return hljs.highlightAuto(code).value;
+                }
+            });
+
+            const renderer = new marked.Renderer();
+
+            renderer.heading = function({ tokens, depth }) {
+                const text = this.parser.parseInline(tokens);
+                const raw = tokens.map(t => t.raw || t.text || '').join('');
+                const id = raw.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                return `<h${depth} id="${id}">${text}</h${depth}>`;
+            };
+
+            const origCode = renderer.code;
+            renderer.code = function({ text, lang }) {
+                const langLabel = lang ? `<span class="lang-label">${lang}</span>` : '';
+                const highlighted = lang && hljs.getLanguage(lang)
+                    ? hljs.highlight(text, { language: lang }).value
+                    : hljs.highlightAuto(text).value;
+                return `<pre>${langLabel}<code class="hljs language-${lang || 'plaintext'}">${highlighted}</code></pre>`;
+            };
+
+            marked.use({ renderer });
+
+            const content = document.getElementById('content');
+            content.innerHTML = marked.parse(MARKDOWN);
+
+            content.querySelectorAll('a[href^="http"]').forEach(a => {
+                a.setAttribute('target', '_blank');
+                a.setAttribute('rel', 'noopener');
+            });
+
+            const sidebar = document.getElementById('sidebar');
+            const nav = document.createElement('nav');
+            const headings = content.querySelectorAll('h1, h2');
+
+            let currentGroup = null;
+            headings.forEach((h, i) => {
+                if (i === 0) {
+                  return;
+                }
+
+                if (h.tagName === 'H1') {
+                    const group = document.createElement('div');
+                    group.className = 'nav-heading';
+                    group.textContent = h.textContent;
+                    nav.appendChild(group);
+                }
+
+                const a = document.createElement('a');
+                a.href = '#' + h.id;
+                a.textContent = h.textContent;
+                if (h.tagName === 'H1') {
+                    a.style.fontWeight = '600';
+                }
+                nav.appendChild(a);
+            });
+
+            sidebar.appendChild(nav);
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        nav.querySelectorAll('a').forEach(a => {
+                            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-80px 0px -70% 0px' });
+
+            headings.forEach(h => { if (h.id) observer.observe(h); });
+
+            document.querySelectorAll('[data-tabs]').forEach(tabs => {
+                tabs.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        tabs.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                        tabs.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                        btn.classList.add('active');
+                        document.getElementById(btn.dataset.tab).classList.add('active');
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

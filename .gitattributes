@@ -1,0 +1,26 @@
+# Development files excluded from distribution archives
+/src export-ignore
+/docs export-ignore
+/tests export-ignore
+/examples export-ignore
+/.github export-ignore
+/.cargo export-ignore
+/build.rs export-ignore
+/Cargo.toml export-ignore
+/Cargo.lock export-ignore
+/phpunit.xml.dist export-ignore
+/Justfile export-ignore
+/mago.toml export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+
+# Linguist overrides
+examples/ linguist-vendored
+tests/ linguist-vendored
+
+# Consistent line endings
+*.php text eol=lf
+*.rs text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf

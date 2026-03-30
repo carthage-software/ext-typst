@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --ignore-platform-req=ext-typst
+
+      - name: Rust formatting
+        run: cargo fmt -- --check
+
+      - name: Clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Rust tests
+        run: cargo test
+
+      - name: Mago lint
+        run: vendor/bin/mago lint
+
+      - name: Mago analyze
+        run: vendor/bin/mago analyze
+
+  build:
+    name: PHP ${{ matrix.php }}-${{ matrix.ts }} (${{ matrix.name }})
+    needs: checks
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-14]
+        php: ['8.3', '8.4', '8.5']
+        ts: [nts, ts]
+        include:
+          - os: ubuntu-latest
+            name: linux-x86_64
+            ext: libext_typst.so
+          - os: ubuntu-24.04-arm
+            name: linux-aarch64
+            ext: libext_typst.so
+          - os: macos-14
+            name: darwin-arm64
+            ext: libext_typst.dylib
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.os }}-php${{ matrix.php }}-${{ matrix.ts }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        env:
+          phpts: ${{ matrix.ts }}
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+
+      - name: Verify PHP thread safety
+        run: |
+          expected="${{ matrix.ts }}"
+          actual=$(php -r "echo PHP_ZTS ? 'ts' : 'nts';")
+          if [ "$expected" != "$actual" ]; then
+            echo "::error::Expected PHP $expected but got $actual"
+            exit 1
+          fi
+
+      - name: Build extension
+        run: cargo build --release
+
+      - name: Verify extension loads
+        run: |
+          php -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext }}" \
+            -r "var_dump(extension_loaded('typst'));"
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --ignore-platform-req=ext-typst
+
+      - name: Run PHPUnit
+        run: |
+          php -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext }}" \
+            vendor/bin/phpunit
