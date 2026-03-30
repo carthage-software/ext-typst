@@ -32,7 +32,7 @@ jobs:
           tools: composer
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --ignore-platform-req=ext-typst
+        run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
 
       - name: Rust formatting
         run: cargo fmt -- --check
@@ -105,7 +105,7 @@ jobs:
             -r "var_dump(extension_loaded('typst'));"
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --ignore-platform-req=ext-typst
+        run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
 
       - name: Run PHPUnit
         run: |

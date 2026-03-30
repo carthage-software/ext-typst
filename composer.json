@@ -24,10 +24,6 @@
   "require-dev": {
     "phpunit/phpunit": "^12.0",
     "carthage-software/mago": "^1.16.0",
-    "php-standard-library/async": "^6.1",
-    "php-standard-library/file": "^6.1",
-    "php-standard-library/io": "^6.1",
-    "php-standard-library/json": "^6.1",
-    "php-standard-library/str": "^6.1"
+    "php-standard-library/php-standard-library": "^5.0 || ^6.0"
   }
 }

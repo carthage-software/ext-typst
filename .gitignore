@@ -1,6 +1,8 @@
 .DS_Store
+.idea/
 /target
 /vendor
+composer.lock
 *.so
 *.dylib
 *.dll

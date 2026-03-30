@@ -35,7 +35,7 @@ jobs:
         run: cargo build --release
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --ignore-platform-req=ext-typst
+        run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
 
       - name: Generate documentation
         run: php -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" docs/generate.php
