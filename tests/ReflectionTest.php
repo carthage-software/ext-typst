@@ -26,6 +26,12 @@ use Typst\World;
 
 final class ReflectionTest extends TestCase
 {
+    public function testExtensionIsRegisteredAsTypst(): void
+    {
+        static::assertTrue(extension_loaded('typst'));
+        static::assertContains('typst', get_loaded_extensions());
+    }
+
     public function testCompilerIsFinal(): void
     {
         $r = new \ReflectionClass(Compiler::class);

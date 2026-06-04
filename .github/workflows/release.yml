@@ -128,7 +128,7 @@ jobs:
       - name: Verify extension loads
         run: |
           php -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext-file }}" \
-            -r "var_dump(extension_loaded('typst'));"
+            -r "exit(extension_loaded('typst') ? 0 : 1);"
 
       - name: Install Composer dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst

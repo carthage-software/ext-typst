@@ -25,6 +25,7 @@ pub fn typst_engine_version() -> &'static str {
 #[php(startup = startup)]
 pub fn get_module(module: ModuleBuilder) -> ModuleBuilder {
     module
+        .name("typst")
         .interface::<extension::error::PhpInterfaceExceptionInterface>()
         .class::<extension::error::RuntimeException>()
         .class::<extension::error::LogicException>()
