@@ -177,10 +177,120 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  build-musl:
+    name: PHP ${{ matrix.php }}-nts (linux-x86_64-musl)
+    runs-on: ubuntu-latest
+    needs: [metadata, create-release]
+    if: always() && needs.metadata.result == 'success' && (needs.create-release.result == 'success' || needs.create-release.result == 'skipped')
+    container:
+      image: php:${{ matrix.php }}-cli-alpine
+    defaults:
+      run:
+        shell: sh
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+
+    env:
+      LIBCLANG_PATH: /usr/lib/llvm16/lib
+
+    steps:
+      - name: Install Alpine dependencies
+        run: |
+          apk add --no-cache \
+            bash \
+            build-base \
+            clang16-libclang \
+            curl \
+            git \
+            github-cli \
+            libxml2-dev \
+            linux-headers \
+            oniguruma-dev \
+            openssl \
+            zip
+          docker-php-ext-install dom mbstring xml xmlwriter
+
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: release-musl-php${{ matrix.php }}-nts
+
+      - name: Install Composer
+        run: |
+          curl -sS https://getcomposer.org/installer -o composer-setup.php
+          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+          rm composer-setup.php
+
+      - name: Verify PHP thread safety
+        run: |
+          actual=$(php -r "echo PHP_ZTS ? 'ts' : 'nts';")
+          if [ "nts" != "$actual" ]; then
+            echo "::error::Expected PHP nts but got $actual"
+            exit 1
+          fi
+
+      - name: Build extension
+        run: cargo build --release
+
+      - name: Inspect linked libraries
+        run: ldd target/release/libext_typst.so || true
+
+      - name: Verify extension loads
+        run: |
+          php -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
+            -r "var_dump(extension_loaded('typst'));"
+
+      - name: Install Composer dependencies
+        run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
+
+      - name: Run PHPUnit
+        run: |
+          php -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
+            vendor/bin/phpunit
+
+      - name: Package binary
+        id: package
+        run: |
+          VERSION="${{ needs.metadata.outputs.version }}"
+          PKG_NAME="php_typst-${VERSION}_php${{ matrix.php }}-x86_64-linux-musl"
+          STAGING="_release/${PKG_NAME}"
+          mkdir -p "${STAGING}"
+
+          cp "target/release/libext_typst.so" "${STAGING}/typst.so"
+
+          cd _release
+          zip -r "${PKG_NAME}.zip" "${PKG_NAME}"
+          cd ..
+
+          echo "PKG_NAME=${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
+          echo "PKG_PATH=_release/${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: ${{ steps.package.outputs.PKG_PATH }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.package.outputs.PKG_NAME }}
+          path: ${{ steps.package.outputs.PKG_PATH }}
+
+      - name: Upload to release
+        if: needs.metadata.outputs.is-release == 'true'
+        run: gh release upload "${{ github.ref_name }}" "${{ steps.package.outputs.PKG_PATH }}" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   publish-release:
     name: Publish release
     runs-on: ubuntu-latest
-    needs: [metadata, build]
+    needs: [metadata, build, build-musl]
     if: needs.metadata.outputs.is-release == 'true'
     steps:
       - uses: actions/checkout@v4
