@@ -127,7 +127,8 @@ jobs:
 
       - name: Verify extension loads
         run: |
-          php -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext-file }}" \
+          php -d display_startup_errors=1 \
+            -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext-file }}" \
             -r "exit(extension_loaded('typst') ? 0 : 1);"
 
       - name: Install Composer dependencies
