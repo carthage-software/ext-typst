@@ -12,9 +12,6 @@ use Typst\Inspector;
 use Typst\Source;
 use Typst\World;
 
-/**
- * @mago-expect analysis:redundant-type-comparison - runtime checks, verifying API
- */
 final class WorldTest extends TestCase
 {
     public function testDefaultConstruction(): void
