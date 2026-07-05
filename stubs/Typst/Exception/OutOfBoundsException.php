@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Exception;
 
+use OutOfBoundsException as RootOutOfBoundsException;
 use Typst;
 
 /**
@@ -15,4 +16,4 @@ use Typst;
  *   {@see Typst\Document::pageWidth()}, or {@see Typst\Document::pageHeight()}
  * - Byte offset beyond the output size in {@see Typst\Output\OutputInterface::bytes()}
  */
-final class OutOfBoundsException extends \OutOfBoundsException implements ExceptionInterface {}
+final class OutOfBoundsException extends RootOutOfBoundsException implements ExceptionInterface {}

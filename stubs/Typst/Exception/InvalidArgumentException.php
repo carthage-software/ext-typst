@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Exception;
 
+use InvalidArgumentException as RootInvalidArgumentException;
 use Typst;
 
 /**
@@ -18,4 +19,4 @@ use Typst;
  * - Non-existent font directories in {@see Typst\World}
  * - Passing a {@see Typst\Source} to a compiler/inspector from a different world
  */
-final class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface {}
+final class InvalidArgumentException extends RootInvalidArgumentException implements ExceptionInterface {}

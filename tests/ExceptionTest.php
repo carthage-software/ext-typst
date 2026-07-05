@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Typst\Tests;
 
+use InvalidArgumentException as RootInvalidArgumentException;
+use LogicException as RootLogicException;
+use OutOfBoundsException as RootOutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use RuntimeException as RootRuntimeException;
 use Throwable;
 use Typst\Compiler;
 use Typst\Exception\ExceptionInterface;
@@ -32,7 +36,7 @@ final class ExceptionTest extends TestCase
     public function testRuntimeExceptionExtendsSplRuntimeException(): void
     {
         $r = new ReflectionClass(RuntimeException::class);
-        static::assertTrue($r->isSubclassOf(\RuntimeException::class));
+        static::assertTrue($r->isSubclassOf(RootRuntimeException::class));
     }
 
     public function testRuntimeExceptionImplementsExceptionInterface(): void
@@ -44,7 +48,7 @@ final class ExceptionTest extends TestCase
     public function testLogicExceptionExtendsSplLogicException(): void
     {
         $r = new ReflectionClass(LogicException::class);
-        static::assertTrue($r->isSubclassOf(\LogicException::class));
+        static::assertTrue($r->isSubclassOf(RootLogicException::class));
     }
 
     public function testLogicExceptionImplementsExceptionInterface(): void
@@ -56,7 +60,7 @@ final class ExceptionTest extends TestCase
     public function testInvalidArgumentExceptionExtendsSplInvalidArgumentException(): void
     {
         $r = new ReflectionClass(InvalidArgumentException::class);
-        static::assertTrue($r->isSubclassOf(\InvalidArgumentException::class));
+        static::assertTrue($r->isSubclassOf(RootInvalidArgumentException::class));
     }
 
     public function testInvalidArgumentExceptionImplementsExceptionInterface(): void
@@ -68,13 +72,13 @@ final class ExceptionTest extends TestCase
     public function testInvalidArgumentExceptionIsAlsoLogicException(): void
     {
         $r = new ReflectionClass(InvalidArgumentException::class);
-        static::assertTrue($r->isSubclassOf(\LogicException::class));
+        static::assertTrue($r->isSubclassOf(RootLogicException::class));
     }
 
     public function testOutOfBoundsExceptionExtendsSplOutOfBoundsException(): void
     {
         $r = new ReflectionClass(OutOfBoundsException::class);
-        static::assertTrue($r->isSubclassOf(\OutOfBoundsException::class));
+        static::assertTrue($r->isSubclassOf(RootOutOfBoundsException::class));
     }
 
     public function testOutOfBoundsExceptionImplementsExceptionInterface(): void
@@ -86,7 +90,7 @@ final class ExceptionTest extends TestCase
     public function testOutOfBoundsExceptionIsAlsoRuntimeException(): void
     {
         $r = new ReflectionClass(OutOfBoundsException::class);
-        static::assertTrue($r->isSubclassOf(\RuntimeException::class));
+        static::assertTrue($r->isSubclassOf(RootRuntimeException::class));
     }
 
     public function testCompilationFailureCatchableAsExceptionInterface(): void
@@ -99,7 +103,7 @@ final class ExceptionTest extends TestCase
             static::fail('Expected RuntimeException');
         } catch (ExceptionInterface $e) {
             static::assertInstanceOf(RuntimeException::class, $e);
-            static::assertInstanceOf(\RuntimeException::class, $e);
+            static::assertInstanceOf(RootRuntimeException::class, $e);
         }
     }
 

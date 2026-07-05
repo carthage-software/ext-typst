@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Exception;
 
+use RuntimeException as RootRuntimeException;
 use Typst;
 
 /**
@@ -25,7 +26,7 @@ use Typst;
  * }
  * ```
  */
-final class RuntimeException extends \RuntimeException implements ExceptionInterface
+final class RuntimeException extends RootRuntimeException implements ExceptionInterface
 {
     /**
      * Typst compilation failed.

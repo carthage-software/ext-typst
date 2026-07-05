@@ -13,6 +13,9 @@ use Typst\PdfOptions;
 use Typst\PdfValidator;
 use Typst\PdfVersion;
 
+use const INF;
+use const NAN;
+
 final class OptionsTest extends TestCase
 {
     public function testImageOptionsDefault(): void

@@ -116,6 +116,8 @@ final readonly class PdfOptions
      * @throws Exception\InvalidArgumentException If first or last page is negative,
      *                                            first page is greater than last page,
      *                                            or version and validator are incompatible.
+     *
+     * @mago-expect lint:excessive-parameter-list
      */
     public function __construct(
         ?string $identifier = null,
