@@ -140,8 +140,10 @@ jobs:
       - name: Install build dependencies
         run: |
           apk add --no-cache \
+            bash \
             build-base \
             clang16-libclang \
+            curl \
             git \
             linux-headers \
             openssl
