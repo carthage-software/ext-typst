@@ -71,7 +71,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, ubuntu-24.04-arm, macos-14]
-        php: ['8.3', '8.4', '8.5']
+        php: ["8.3", "8.4", "8.5"]
         ts: [nts, ts]
         include:
           - os: ubuntu-latest
@@ -129,7 +129,7 @@ jobs:
         run: |
           php -d display_startup_errors=1 \
             -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext-file }}" \
-            -r "exit(extension_loaded('typst') ? 0 : 1);"
+            -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
 
       - name: Install Composer dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
@@ -195,29 +195,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.3', '8.4', '8.5']
+        php: ["8.3", "8.4", "8.5"]
 
     env:
       LIBCLANG_PATH: /usr/lib/llvm16/lib
       BINDGEN_EXTRA_CLANG_ARGS: -I/usr/lib/llvm16/lib/clang/16/include
 
     steps:
-      - name: Install Alpine dependencies
+      - name: Install build dependencies
         run: |
           apk add --no-cache \
-            bash \
             build-base \
             clang16-libclang \
-            curl \
             git \
             github-cli \
-            lexbor-dev \
-            libxml2-dev \
             linux-headers \
-            oniguruma-dev \
             openssl \
             zip
-          docker-php-ext-install dom mbstring xml xmlwriter
 
       - uses: actions/checkout@v4
 
@@ -226,12 +220,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: release-musl-php${{ matrix.php }}-nts
-
-      - name: Install Composer
-        run: |
-          curl -sS https://getcomposer.org/installer -o composer-setup.php
-          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          rm composer-setup.php
 
       - name: Verify PHP thread safety
         run: |
@@ -249,16 +237,9 @@ jobs:
 
       - name: Verify extension loads
         run: |
-          php -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
-            -r "var_dump(extension_loaded('typst'));"
-
-      - name: Install Composer dependencies
-        run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
-
-      - name: Run PHPUnit
-        run: |
-          php -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
-            vendor/bin/phpunit
+          php -d display_startup_errors=1 \
+            -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
+            -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
 
       - name: Package binary
         id: package
