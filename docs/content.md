@@ -44,13 +44,29 @@ Both NTS (Non-Thread Safe) and ZTS (Thread Safe) builds are available for PHP 8.
 
 ### IDE and static analysis support
 
-Install the Composer package to get PHP stubs for autocompletion and static analysis:
+Install the stubs package to get PHP stubs for autocompletion and static analysis:
 
 ```bash
-composer require --dev carthage-software/ext-typst
+composer require --dev carthage-software/ext-typst-stubs
 ```
 
-This enables full support in IDEs like PhpStorm and static analyzers like Mago, PHPStan, and Psalm.
+The stubs are a separate package from the extension itself (the extension is installed via PIE, above). They declare the `Typst\*` API so editors and analyzers understand it even where the extension isn't loaded, and each tag matches the corresponding extension release.
+
+PhpStorm and Mago discover the stubs automatically. For PHPStan, add the stub directory to `phpstan.neon`:
+
+```neon
+parameters:
+    scanDirectories:
+        - vendor/carthage-software/ext-typst-stubs/stubs
+```
+
+For Psalm, reference it in `psalm.xml`:
+
+```xml
+<stubs>
+    <file name="vendor/carthage-software/ext-typst-stubs/stubs/Typst" />
+</stubs>
+```
 
 ### Verify installation
 
