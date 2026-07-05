@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Typst\Tests;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Typst\Compiler;
 use Typst\Exception\InvalidArgumentException;
 use Typst\Inspector;
@@ -88,7 +89,7 @@ final class InputTest extends TestCase
     {
         $source = self::$world->loadString('#set page(height: auto)' . "\n" . '#sys.inputs.at("obj")');
         $this->expectException(InvalidArgumentException::class);
-        self::$compiler->compile($source, ['obj' => new \stdClass()]);
+        self::$compiler->compile($source, ['obj' => new stdClass()]);
     }
 
     public function testResourceInputThrows(): void
@@ -109,7 +110,7 @@ final class InputTest extends TestCase
     {
         $source = self::$world->loadString('#set page(height: auto)' . "\n" . '#sys.inputs.at("data")');
         $this->expectException(InvalidArgumentException::class);
-        self::$compiler->compile($source, ['data' => ['nested' => new \stdClass()]]);
+        self::$compiler->compile($source, ['data' => ['nested' => new stdClass()]]);
     }
 
     public function testEmptyInputs(): void

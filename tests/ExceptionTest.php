@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Typst\Tests;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Throwable;
 use Typst\Compiler;
 use Typst\Exception\ExceptionInterface;
 use Typst\Exception\InvalidArgumentException;
@@ -17,73 +19,73 @@ final class ExceptionTest extends TestCase
 {
     public function testExceptionInterfaceIsInterface(): void
     {
-        $r = new \ReflectionClass(ExceptionInterface::class);
+        $r = new ReflectionClass(ExceptionInterface::class);
         static::assertTrue($r->isInterface());
     }
 
     public function testExceptionInterfaceExtendsThrowable(): void
     {
-        $r = new \ReflectionClass(ExceptionInterface::class);
-        static::assertTrue($r->implementsInterface(\Throwable::class));
+        $r = new ReflectionClass(ExceptionInterface::class);
+        static::assertTrue($r->implementsInterface(Throwable::class));
     }
 
     public function testRuntimeExceptionExtendsSplRuntimeException(): void
     {
-        $r = new \ReflectionClass(RuntimeException::class);
+        $r = new ReflectionClass(RuntimeException::class);
         static::assertTrue($r->isSubclassOf(\RuntimeException::class));
     }
 
     public function testRuntimeExceptionImplementsExceptionInterface(): void
     {
-        $r = new \ReflectionClass(RuntimeException::class);
+        $r = new ReflectionClass(RuntimeException::class);
         static::assertTrue($r->implementsInterface(ExceptionInterface::class));
     }
 
     public function testLogicExceptionExtendsSplLogicException(): void
     {
-        $r = new \ReflectionClass(LogicException::class);
+        $r = new ReflectionClass(LogicException::class);
         static::assertTrue($r->isSubclassOf(\LogicException::class));
     }
 
     public function testLogicExceptionImplementsExceptionInterface(): void
     {
-        $r = new \ReflectionClass(LogicException::class);
+        $r = new ReflectionClass(LogicException::class);
         static::assertTrue($r->implementsInterface(ExceptionInterface::class));
     }
 
     public function testInvalidArgumentExceptionExtendsSplInvalidArgumentException(): void
     {
-        $r = new \ReflectionClass(InvalidArgumentException::class);
+        $r = new ReflectionClass(InvalidArgumentException::class);
         static::assertTrue($r->isSubclassOf(\InvalidArgumentException::class));
     }
 
     public function testInvalidArgumentExceptionImplementsExceptionInterface(): void
     {
-        $r = new \ReflectionClass(InvalidArgumentException::class);
+        $r = new ReflectionClass(InvalidArgumentException::class);
         static::assertTrue($r->implementsInterface(ExceptionInterface::class));
     }
 
     public function testInvalidArgumentExceptionIsAlsoLogicException(): void
     {
-        $r = new \ReflectionClass(InvalidArgumentException::class);
+        $r = new ReflectionClass(InvalidArgumentException::class);
         static::assertTrue($r->isSubclassOf(\LogicException::class));
     }
 
     public function testOutOfBoundsExceptionExtendsSplOutOfBoundsException(): void
     {
-        $r = new \ReflectionClass(OutOfBoundsException::class);
+        $r = new ReflectionClass(OutOfBoundsException::class);
         static::assertTrue($r->isSubclassOf(\OutOfBoundsException::class));
     }
 
     public function testOutOfBoundsExceptionImplementsExceptionInterface(): void
     {
-        $r = new \ReflectionClass(OutOfBoundsException::class);
+        $r = new ReflectionClass(OutOfBoundsException::class);
         static::assertTrue($r->implementsInterface(ExceptionInterface::class));
     }
 
     public function testOutOfBoundsExceptionIsAlsoRuntimeException(): void
     {
-        $r = new \ReflectionClass(OutOfBoundsException::class);
+        $r = new ReflectionClass(OutOfBoundsException::class);
         static::assertTrue($r->isSubclassOf(\RuntimeException::class));
     }
 

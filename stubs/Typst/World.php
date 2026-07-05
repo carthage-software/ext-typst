@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * The Typst compilation environment.
  *
@@ -53,7 +55,11 @@ final class World
         ?bool $embed_default_fonts = null,
         ?array $font_dirs = null,
         ?string $package_dir = null,
-    ) {}
+    ) {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Adds a font from raw binary data (e.g. the contents of a .ttf file).
@@ -65,7 +71,12 @@ final class World
      *
      * @throws Exception\RuntimeException If the font data is invalid or contains no usable fonts.
      */
-    public function addFontData(string $data): void {}
+    public function addFontData(string $data): void
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Adds a font from a file path.
@@ -77,7 +88,12 @@ final class World
      *
      * @throws Exception\RuntimeException If the file cannot be read or contains no usable fonts.
      */
-    public function addFontFile(string $path): void {}
+    public function addFontFile(string $path): void
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Loads a Typst source from an inline string.
@@ -88,7 +104,12 @@ final class World
      *
      * @param string $source The Typst markup to load.
      */
-    public function loadString(string $source): Source {}
+    public function loadString(string $source): Source
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Loads a Typst source from a file.
@@ -101,7 +122,12 @@ final class World
      *
      * @throws Exception\RuntimeException If the file cannot be found or read.
      */
-    public function loadFile(string $path): Source {}
+    public function loadFile(string $path): Source
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the font family names available in this world.
@@ -113,12 +139,22 @@ final class World
      *
      * @return list<string>
      */
-    public function getFontFamilies(): array {}
+    public function getFontFamilies(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns debug information about this world's configuration.
      *
      * @return array<string, string>
      */
-    public function __debugInfo(): array {}
+    public function __debugInfo(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

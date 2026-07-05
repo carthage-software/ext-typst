@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Compiles Typst sources into documents.
  *
@@ -28,7 +30,12 @@ final class Compiler
      *
      * @param World $world The compilation environment.
      */
-    public function __construct(World $world) {}
+    public function __construct(World $world)
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Compiles a source into a document.
@@ -45,7 +52,12 @@ final class Compiler
      * @throws Exception\InvalidArgumentException If inputs contain unsupported types (objects, resources),
      *                                            or if the source was created by a different world.
      */
-    public function compile(Source $source, ?array $inputs = null): Document {}
+    public function compile(Source $source, ?array $inputs = null): Document
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Compiles a Typst string into a document.
@@ -61,7 +73,12 @@ final class Compiler
      * @throws Exception\RuntimeException If compilation fails.
      * @throws Exception\InvalidArgumentException If inputs contain unsupported types.
      */
-    public function compileString(string $source, ?array $inputs = null): Document {}
+    public function compileString(string $source, ?array $inputs = null): Document
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Compiles a Typst file into a document.
@@ -78,7 +95,12 @@ final class Compiler
      * @throws Exception\RuntimeException If the file cannot be read or compilation fails.
      * @throws Exception\InvalidArgumentException If inputs contain unsupported types.
      */
-    public function compileFile(string $path, ?array $inputs = null): Document {}
+    public function compileFile(string $path, ?array $inputs = null): Document
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Starts a compilation on a background OS thread and returns immediately.
@@ -114,7 +136,12 @@ final class Compiler
      *                                            or the source was created by a different world.
      * @throws Exception\RuntimeException If the notification pipe could not be created.
      */
-    public function compileInBackground(Source $source, ?array $inputs = null): PendingDocument {}
+    public function compileInBackground(Source $source, ?array $inputs = null): PendingDocument
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Clears all internal caches (file, source, path) and returns the number of cleared entries.
@@ -125,7 +152,12 @@ final class Compiler
      *
      * @return int<0, max> The total number of cache entries that were cleared.
      */
-    public function clearCache(): int {}
+    public function clearCache(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a clone of the world used by this compiler.
@@ -133,12 +165,22 @@ final class Compiler
      * The returned world is an independent copy - modifications to it
      * (e.g. adding fonts) will not affect this compiler.
      */
-    public function getWorld(): World {}
+    public function getWorld(): World
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns debug information about this compiler's configuration.
      *
      * @return array<string, string>
      */
-    public function __debugInfo(): array {}
+    public function __debugInfo(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

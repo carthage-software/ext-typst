@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Typst\Tests;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Stringable;
 use Typst\Diagnostic\CompilationResult;
 use Typst\Diagnostic\Diagnostic;
 use Typst\Diagnostic\Severity;
@@ -189,8 +191,8 @@ final class InspectTest extends TestCase
 
     public function testDiagnosticImplementsStringable(): void
     {
-        $r = new \ReflectionClass(Diagnostic::class);
-        static::assertTrue($r->implementsInterface(\Stringable::class));
+        $r = new ReflectionClass(Diagnostic::class);
+        static::assertTrue($r->implementsInterface(Stringable::class));
     }
 
     public function testDiagnosticSpanWithSourceLocation(): void

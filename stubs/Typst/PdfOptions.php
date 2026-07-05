@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Configuration options for PDF export.
  *
@@ -123,21 +125,35 @@ final readonly class PdfOptions
         ?PdfVersion $version = null,
         ?PdfValidator $validator = null,
         ?bool $tagged = null,
-    ) {}
+    ) {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given document identifier.
      *
      * @param string|null $identifier The document identifier, or null to use the default (hash of title and author).
      */
-    public function withIdentifier(?string $identifier): self {}
+    public function withIdentifier(?string $identifier): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given creation timestamp.
      *
      * @param int|null $timestamp Unix timestamp in seconds (UTC), or null to use the document's date setting.
      */
-    public function withTimestamp(?int $timestamp): self {}
+    public function withTimestamp(?int $timestamp): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given first page index.
@@ -146,7 +162,12 @@ final readonly class PdfOptions
      *
      * @throws Exception\InvalidArgumentException If first page is negative, or greater than the current last page.
      */
-    public function withFirstPage(?int $first_page): self {}
+    public function withFirstPage(?int $first_page): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given last page index.
@@ -155,7 +176,12 @@ final readonly class PdfOptions
      *
      * @throws Exception\InvalidArgumentException If last page is negative, or less than the current first page.
      */
-    public function withLastPage(?int $last_page): self {}
+    public function withLastPage(?int $last_page): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given PDF version.
@@ -164,7 +190,12 @@ final readonly class PdfOptions
      *
      * @throws Exception\InvalidArgumentException If the version is incompatible with the current validator.
      */
-    public function withVersion(?PdfVersion $version): self {}
+    public function withVersion(?PdfVersion $version): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given PDF compliance validator.
@@ -173,12 +204,22 @@ final readonly class PdfOptions
      *
      * @throws Exception\InvalidArgumentException If the validator is incompatible with the current version.
      */
-    public function withValidator(?PdfValidator $validator): self {}
+    public function withValidator(?PdfValidator $validator): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given tagged PDF setting.
      *
      * @param bool $tagged Whether to produce a tagged (structured) PDF.
      */
-    public function withTagged(bool $tagged): self {}
+    public function withTagged(bool $tagged): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

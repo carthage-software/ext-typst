@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Represents a loaded Typst source.
  *
@@ -29,7 +31,12 @@ final class Source
      *
      * @return int<0, max>
      */
-    public function getId(): int {}
+    public function getId(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the full source text content.
@@ -38,5 +45,10 @@ final class Source
      * the time it was loaded. For string sources, this is the string
      * that was passed to {@see World::loadString()}.
      */
-    public function getText(): string {}
+    public function getText(): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

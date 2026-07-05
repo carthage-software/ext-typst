@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Represents a document compilation running on a background thread.
  *
@@ -41,7 +43,12 @@ final class PendingDocument
      * This is a non-blocking check. Once this returns `true`, calling
      * {@see join()} will return immediately without blocking.
      */
-    public function isReady(): bool {}
+    public function isReady(): bool
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a readable PHP stream resource that becomes readable when
@@ -58,7 +65,12 @@ final class PendingDocument
      *
      * @throws Exception\LogicException If {@see join()} has already been called.
      */
-    public function getNotificationStream() {}
+    public function getNotificationStream()
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Blocks until the background compilation finishes and returns the document.
@@ -71,5 +83,10 @@ final class PendingDocument
      * @throws Exception\RuntimeException If compilation failed or the
      *                                    background thread panicked.
      */
-    public function join(): Document {}
+    public function join(): Document
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

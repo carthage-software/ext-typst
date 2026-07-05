@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Output;
 
+use Error;
 use Stringable;
 use Typst;
 
@@ -31,12 +32,22 @@ final class Pdf implements OutputInterface
      * @throws Typst\Exception\InvalidArgumentException If $offset or $limit is negative.
      * @throws Typst\Exception\OutOfBoundsException If $offset is beyond the data size.
      */
-    public function bytes(?int $offset = null, ?int $limit = null): string {}
+    public function bytes(?int $offset = null, ?int $limit = null): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the total byte length of the PDF data.
      */
-    public function size(): int {}
+    public function size(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the number of pages in the PDF.
@@ -45,7 +56,12 @@ final class Pdf implements OutputInterface
      * differ from {@see Typst\Document::pageCount()} when a page range
      * was specified via {@see Typst\PdfOptions}.
      */
-    public function pageCount(): int {}
+    public function pageCount(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Writes the PDF to a file on disk.
@@ -54,12 +70,22 @@ final class Pdf implements OutputInterface
      *
      * @throws Typst\Exception\RuntimeException If the file cannot be written.
      */
-    public function save(string $path): void {}
+    public function save(string $path): void
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the raw PDF bytes as a binary string.
      *
      * Equivalent to calling {@see bytes()} with no arguments.
      */
-    public function __toString(): string {}
+    public function __toString(): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

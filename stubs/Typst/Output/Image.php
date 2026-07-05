@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Output;
 
+use Error;
 use Typst;
 
 /**
@@ -28,17 +29,32 @@ final class Image implements OutputInterface
      * @throws Typst\Exception\InvalidArgumentException If $offset or $limit is negative.
      * @throws Typst\Exception\OutOfBoundsException If $offset is beyond the data size.
      */
-    public function bytes(?int $offset = null, ?int $limit = null): string {}
+    public function bytes(?int $offset = null, ?int $limit = null): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the total byte length of the image data.
      */
-    public function size(): int {}
+    public function size(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the image format (PNG or JPEG).
      */
-    public function format(): Typst\ImageFormat {}
+    public function format(): Typst\ImageFormat
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the image width in pixels.
@@ -46,7 +62,12 @@ final class Image implements OutputInterface
      * The pixel width depends on the page dimensions and the DPI setting
      * in {@see Typst\ImageOptions}.
      */
-    public function width(): int {}
+    public function width(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the image height in pixels.
@@ -54,7 +75,12 @@ final class Image implements OutputInterface
      * The pixel height depends on the page dimensions and the DPI setting
      * in {@see Typst\ImageOptions}.
      */
-    public function height(): int {}
+    public function height(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Writes the image to a file on disk.
@@ -63,12 +89,22 @@ final class Image implements OutputInterface
      *
      * @throws Typst\Exception\RuntimeException If the file cannot be written.
      */
-    public function save(string $path): void {}
+    public function save(string $path): void
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the raw image bytes as a binary string.
      *
      * Equivalent to calling {@see bytes()} with no arguments.
      */
-    public function __toString(): string {}
+    public function __toString(): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

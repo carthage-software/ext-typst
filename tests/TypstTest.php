@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Typst\Compiler;
 use Typst\Diagnostic\Severity;
 use Typst\Document;
+use Typst\Exception\InvalidArgumentException;
+use Typst\Exception\OutOfBoundsException;
 use Typst\Exception\RuntimeException;
 use Typst\ImageFormat;
 use Typst\ImageOptions;
@@ -919,14 +921,14 @@ World');
     public function testPageDimensionsNegativePageThrows(): void
     {
         $doc = $this->compile('Hello');
-        $this->expectException(\Typst\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $doc->pageWidth(page: -1);
     }
 
     public function testPageDimensionsOutOfBoundsThrows(): void
     {
         $doc = $this->compile('Hello');
-        $this->expectException(\Typst\Exception\OutOfBoundsException::class);
+        $this->expectException(OutOfBoundsException::class);
         $doc->pageHeight(page: 999);
     }
 

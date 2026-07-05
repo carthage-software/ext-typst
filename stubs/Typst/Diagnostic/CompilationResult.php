@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Diagnostic;
 
+use Error;
 use Typst;
 
 /**
@@ -25,7 +26,12 @@ final class CompilationResult
      * This method can be called multiple times and will return a new
      * {@see Typst\Document} instance backed by the same underlying data each time.
      */
-    public function getDocument(): ?Typst\Document {}
+    public function getDocument(): ?Typst\Document
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns true if compilation succeeded (no errors).
@@ -33,14 +39,24 @@ final class CompilationResult
      * A successful compilation may still have warnings. Check
      * {@see hasWarnings()} to determine if any warnings were produced.
      */
-    public function success(): bool {}
+    public function success(): bool
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns all diagnostics (both errors and warnings).
      *
      * @return list<Diagnostic>
      */
-    public function diagnostics(): array {}
+    public function diagnostics(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns only warning diagnostics.
@@ -50,7 +66,12 @@ final class CompilationResult
      *
      * @return list<Diagnostic>
      */
-    public function warnings(): array {}
+    public function warnings(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns only error diagnostics.
@@ -59,15 +80,30 @@ final class CompilationResult
      *
      * @return list<Diagnostic>
      */
-    public function errors(): array {}
+    public function errors(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns true if there are any warning diagnostics.
      */
-    public function hasWarnings(): bool {}
+    public function hasWarnings(): bool
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns true if there are any error diagnostics.
      */
-    public function hasErrors(): bool {}
+    public function hasErrors(): bool
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

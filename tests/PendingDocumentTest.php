@@ -7,6 +7,7 @@ namespace Typst\Tests;
 use PHPUnit\Framework\TestCase;
 use Typst\Compiler;
 use Typst\Document;
+use Typst\Exception\InvalidArgumentException;
 use Typst\Exception\LogicException;
 use Typst\Exception\RuntimeException;
 use Typst\PendingDocument;
@@ -216,7 +217,7 @@ final class PendingDocumentTest extends TestCase
         $otherWorld = new World();
         $source = $otherWorld->loadString('Hello');
 
-        $this->expectException(\Typst\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->compiler->compileInBackground($source);
     }
 

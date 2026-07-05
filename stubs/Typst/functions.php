@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Returns the ext-typst extension version string.
  *
@@ -13,7 +15,12 @@ namespace Typst;
  *
  * @see typst_version() for the Typst engine version.
  */
-function version(): string {}
+function version(): string
+{
+    throw new Error(
+        'Attempted to call stub function ' . __FUNCTION__ . '(), which should be implemented by the Typst extension.',
+    );
+}
 
 /**
  * Returns the embedded Typst engine version string.
@@ -28,4 +35,9 @@ function version(): string {}
  *
  * @see version() for the extension version.
  */
-function typst_version(): string {}
+function typst_version(): string
+{
+    throw new Error(
+        'Attempted to call stub function ' . __FUNCTION__ . '(), which should be implemented by the Typst extension.',
+    );
+}

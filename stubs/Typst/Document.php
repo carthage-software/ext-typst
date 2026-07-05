@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * A compiled Typst document that can be exported to PDF, images, or SVG.
  *
@@ -22,7 +24,12 @@ final class Document
     /**
      * Returns the total number of pages in the document.
      */
-    public function pageCount(): int {}
+    public function pageCount(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the width of a page in typographic points (1 pt = 1/72 inch).
@@ -35,7 +42,12 @@ final class Document
      * @throws Exception\InvalidArgumentException If the page index is negative.
      * @throws Exception\OutOfBoundsException If the page index is beyond the document's page count.
      */
-    public function pageWidth(?int $page = null): float {}
+    public function pageWidth(?int $page = null): float
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the height of a page in typographic points (1 pt = 1/72 inch).
@@ -48,7 +60,12 @@ final class Document
      * @throws Exception\InvalidArgumentException If the page index is negative.
      * @throws Exception\OutOfBoundsException If the page index is beyond the document's page count.
      */
-    public function pageHeight(?int $page = null): float {}
+    public function pageHeight(?int $page = null): float
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Exports the document as a PDF.
@@ -67,7 +84,12 @@ final class Document
      * @see PdfVersion for PDF version selection.
      * @see PdfValidator for PDF/A and PDF/UA compliance.
      */
-    public function toPdf(?PdfOptions $options = null): Output\Pdf {}
+    public function toPdf(?PdfOptions $options = null): Output\Pdf
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Renders a single page as a raster image (PNG or JPEG).
@@ -82,7 +104,12 @@ final class Document
      *
      * @see ImageOptions for controlling format, quality, and DPI.
      */
-    public function toImage(?int $page = null, ?ImageOptions $options = null): Output\Image {}
+    public function toImage(?int $page = null, ?ImageOptions $options = null): Output\Image
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Renders all pages as raster images (PNG or JPEG).
@@ -98,7 +125,12 @@ final class Document
      *
      * @see ImageOptions for controlling format, quality, and DPI.
      */
-    public function toImages(?ImageOptions $options = null): array {}
+    public function toImages(?ImageOptions $options = null): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Exports a single page as SVG (Scalable Vector Graphics).
@@ -112,7 +144,12 @@ final class Document
      * @throws Exception\OutOfBoundsException If the page index is beyond the document's page count.
      * @throws Exception\RuntimeException If SVG export fails.
      */
-    public function toSvg(?int $page = null): Output\Svg {}
+    public function toSvg(?int $page = null): Output\Svg
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Exports all pages as SVG (Scalable Vector Graphics).
@@ -121,5 +158,10 @@ final class Document
      *
      * @return list<Output\Svg>
      */
-    public function toSvgs(): array {}
+    public function toSvgs(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

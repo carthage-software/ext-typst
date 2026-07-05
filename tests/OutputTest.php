@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Typst\Tests;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use Stringable;
 use Typst\Compiler;
 use Typst\Exception\InvalidArgumentException;
 use Typst\Exception\OutOfBoundsException;
@@ -58,8 +60,8 @@ final class OutputTest extends TestCase
 
     public function testPdfImplementsStringable(): void
     {
-        $r = new \ReflectionClass(Pdf::class);
-        static::assertTrue($r->implementsInterface(\Stringable::class));
+        $r = new ReflectionClass(Pdf::class);
+        static::assertTrue($r->implementsInterface(Stringable::class));
     }
 
     public function testPdfSave(): void
@@ -140,8 +142,8 @@ final class OutputTest extends TestCase
 
     public function testImageImplementsStringable(): void
     {
-        $r = new \ReflectionClass(Image::class);
-        static::assertTrue($r->implementsInterface(\Stringable::class));
+        $r = new ReflectionClass(Image::class);
+        static::assertTrue($r->implementsInterface(Stringable::class));
     }
 
     public function testImageSave(): void
@@ -200,8 +202,8 @@ final class OutputTest extends TestCase
 
     public function testSvgImplementsStringable(): void
     {
-        $r = new \ReflectionClass(Svg::class);
-        static::assertTrue($r->implementsInterface(\Stringable::class));
+        $r = new ReflectionClass(Svg::class);
+        static::assertTrue($r->implementsInterface(Stringable::class));
     }
 
     public function testSvgSave(): void

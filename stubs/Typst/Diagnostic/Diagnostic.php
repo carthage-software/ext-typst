@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Diagnostic;
 
+use Error;
 use Stringable;
 use Typst;
 
@@ -25,7 +26,12 @@ final readonly class Diagnostic implements Stringable
      * Use this to distinguish between errors and warnings when
      * processing diagnostics programmatically.
      */
-    public function severity(): Severity {}
+    public function severity(): Severity
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the diagnostic message text.
@@ -33,7 +39,12 @@ final readonly class Diagnostic implements Stringable
      * This is the human-readable description of the error or warning,
      * e.g. "unknown variable: foo" or "font 'MyFont' not found".
      */
-    public function message(): string {}
+    public function message(): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns the source location where this diagnostic originated.
@@ -41,7 +52,12 @@ final readonly class Diagnostic implements Stringable
      * Returns null for diagnostics that are not tied to a specific
      * source location (e.g. global configuration errors).
      */
-    public function span(): ?SourceSpan {}
+    public function span(): ?SourceSpan
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns hint messages that may help resolve the issue.
@@ -52,7 +68,12 @@ final readonly class Diagnostic implements Stringable
      *
      * @return list<string>
      */
-    public function hints(): array {}
+    public function hints(): array
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a human-readable string representation.
@@ -60,5 +81,10 @@ final readonly class Diagnostic implements Stringable
      * Format: "severity: message (at file:line:column)" when a span is
      * available, or "severity: message" when detached.
      */
-    public function __toString(): string {}
+    public function __toString(): string
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

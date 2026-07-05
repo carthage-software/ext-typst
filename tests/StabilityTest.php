@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Typst\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Typst;
 use Typst\Compiler;
 use Typst\Document;
 use Typst\Exception\RuntimeException;
@@ -261,12 +262,12 @@ final class StabilityTest extends TestCase
 
     public function testVersionIsSemver(): void
     {
-        static::assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', \Typst\version());
+        static::assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', Typst\version());
     }
 
     public function testTypstVersionIsSemver(): void
     {
-        static::assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', \Typst\typst_version());
+        static::assertMatchesRegularExpression('/^\d+\.\d+\.\d+$/', Typst\typst_version());
     }
 
     public function testNoCachingWithZeroCacheSize(): void

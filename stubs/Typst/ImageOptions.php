@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Configuration options for image rendering.
  *
@@ -64,14 +66,24 @@ final readonly class ImageOptions
      * @throws Exception\InvalidArgumentException If quality is out of the 1-100 range,
      *                                            or DPI is not a finite positive number (zero, negative, NaN, or Inf).
      */
-    public function __construct(?ImageFormat $format = null, ?int $quality = null, ?float $dpi = null) {}
+    public function __construct(?ImageFormat $format = null, ?int $quality = null, ?float $dpi = null)
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given format.
      *
      * @param ImageFormat $format The desired output format.
      */
-    public function withFormat(ImageFormat $format): self {}
+    public function withFormat(ImageFormat $format): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given JPEG quality.
@@ -80,7 +92,12 @@ final readonly class ImageOptions
      *
      * @throws Exception\InvalidArgumentException If quality is outside the 1-100 range.
      */
-    public function withQuality(int $quality): self {}
+    public function withQuality(int $quality): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a new instance with the given DPI.
@@ -89,5 +106,10 @@ final readonly class ImageOptions
      *
      * @throws Exception\InvalidArgumentException If DPI is not a finite positive number.
      */
-    public function withDpi(float $dpi): self {}
+    public function withDpi(float $dpi): self
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

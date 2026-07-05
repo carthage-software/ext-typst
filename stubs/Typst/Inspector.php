@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typst;
 
+use Error;
+
 /**
  * Inspects Typst sources, returning diagnostics instead of throwing.
  *
@@ -29,7 +31,12 @@ final class Inspector
      *
      * @param World $world The compilation environment.
      */
-    public function __construct(World $world) {}
+    public function __construct(World $world)
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Inspects a source and returns a compilation result with diagnostics.
@@ -45,7 +52,12 @@ final class Inspector
      * @throws Exception\InvalidArgumentException If inputs contain unsupported types (objects, resources),
      *                                            or if the source was created by a different world.
      */
-    public function inspect(Source $source, ?array $inputs = null): Diagnostic\CompilationResult {}
+    public function inspect(Source $source, ?array $inputs = null): Diagnostic\CompilationResult
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Inspects a Typst string and returns a compilation result with diagnostics.
@@ -60,7 +72,12 @@ final class Inspector
      *
      * @throws Exception\InvalidArgumentException If inputs contain unsupported types.
      */
-    public function inspectString(string $source, ?array $inputs = null): Diagnostic\CompilationResult {}
+    public function inspectString(string $source, ?array $inputs = null): Diagnostic\CompilationResult
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Inspects a Typst file and returns a compilation result with diagnostics.
@@ -77,7 +94,12 @@ final class Inspector
      * @throws Exception\RuntimeException If the file cannot be read.
      * @throws Exception\InvalidArgumentException If inputs contain unsupported types.
      */
-    public function inspectFile(string $path, ?array $inputs = null): Diagnostic\CompilationResult {}
+    public function inspectFile(string $path, ?array $inputs = null): Diagnostic\CompilationResult
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Clears all internal caches (file, source, path) and returns the number of cleared entries.
@@ -88,7 +110,12 @@ final class Inspector
      *
      * @return int<0, max> The total number of cache entries that were cleared.
      */
-    public function clearCache(): int {}
+    public function clearCache(): int
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 
     /**
      * Returns a clone of the world used by this inspector.
@@ -96,5 +123,10 @@ final class Inspector
      * The returned world is an independent copy - modifications to it
      * (e.g. adding fonts) will not affect this inspector.
      */
-    public function getWorld(): World {}
+    public function getWorld(): World
+    {
+        throw new Error(
+            'Attempted to call stub method ' . __METHOD__ . '(), which should be implemented by the Typst extension.',
+        );
+    }
 }

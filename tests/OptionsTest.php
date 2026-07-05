@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typst\Tests;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Typst\Exception\InvalidArgumentException;
 use Typst\ImageFormat;
@@ -158,7 +159,7 @@ final class OptionsTest extends TestCase
     public function testImageOptionsPropertiesReadOnly(): void
     {
         $opts = new ImageOptions();
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         // @mago-expect analyzer:invalid-property-write
         $opts->quality = 50;
     }
@@ -199,14 +200,14 @@ final class OptionsTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('non-negative');
-        new PdfOptions(first_page: -1); // @mago-expect analysis:invalid-argument - verifying API
+        new PdfOptions(first_page: -1); // @mago-expect analysis:invalid-argument
     }
 
     public function testPdfOptionsNegativeLastPageThrows(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('non-negative');
-        new PdfOptions(last_page: -1); // @mago-expect analysis:invalid-argument - verifying API
+        new PdfOptions(last_page: -1); // @mago-expect analysis:invalid-argument
     }
 
     public function testPdfOptionsFirstPageGreaterThanLastPageThrows(): void
@@ -311,7 +312,7 @@ final class OptionsTest extends TestCase
     public function testPdfOptionsPropertiesReadOnly(): void
     {
         $opts = new PdfOptions();
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         // @mago-expect analyzer:invalid-property-write
         $opts->tagged = false;
     }

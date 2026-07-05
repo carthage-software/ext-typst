@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Typst\Tests;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionEnum;
 use Typst\Diagnostic\Severity;
 use Typst\ImageFormat;
+use ValueError;
 
 final class EnumTest extends TestCase
 {
     public function testSeverityIsBackedIntEnum(): void
     {
         static::assertTrue(enum_exists(Severity::class));
-        $r = new \ReflectionEnum(Severity::class);
+        $r = new ReflectionEnum(Severity::class);
         static::assertTrue($r->isBacked());
         static::assertSame('int', (string) $r->getBackingType());
     }
@@ -38,14 +40,14 @@ final class EnumTest extends TestCase
 
     public function testSeverityFromInvalidThrows(): void
     {
-        $this->expectException(\ValueError::class);
+        $this->expectException(ValueError::class);
         Severity::from(99);
     }
 
     public function testImageFormatIsBackedStringEnum(): void
     {
         static::assertTrue(enum_exists(ImageFormat::class));
-        $r = new \ReflectionEnum(ImageFormat::class);
+        $r = new ReflectionEnum(ImageFormat::class);
         static::assertTrue($r->isBacked());
         static::assertSame('string', (string) $r->getBackingType());
     }
@@ -70,7 +72,7 @@ final class EnumTest extends TestCase
 
     public function testImageFormatFromInvalidThrows(): void
     {
-        $this->expectException(\ValueError::class);
+        $this->expectException(ValueError::class);
         ImageFormat::from('bmp');
     }
 }

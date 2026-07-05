@@ -266,7 +266,7 @@ final class WorldTest extends TestCase
         $source = $world1->loadString("#set page(height: auto)\nHello");
         $compiler = new Compiler($world2);
 
-        $this->expectException(\Typst\Exception\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('different World');
         $compiler->compile($source);
     }
