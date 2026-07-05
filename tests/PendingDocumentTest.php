@@ -70,7 +70,7 @@ final class PendingDocumentTest extends TestCase
         $pending = $this->compiler->compileInBackground($source);
         $stream = $pending->getNotificationStream();
 
-        static::assertIsResource($stream); // @mago-expect analysis:redundant-type-comparison - runtime check
+        static::assertIsResource($stream);
     }
 
     public function testGetNotificationStreamAfterJoinThrowsLogicException(): void
@@ -240,8 +240,8 @@ final class PendingDocumentTest extends TestCase
         $stream1 = $pending->getNotificationStream();
         $stream2 = $pending->getNotificationStream();
 
-        static::assertIsResource($stream1); // @mago-expect analysis:redundant-type-comparison - runtime check.
-        static::assertIsResource($stream2); // @mago-expect analysis:redundant-type-comparison - runtime check.
+        static::assertIsResource($stream1);
+        static::assertIsResource($stream2);
 
         $pending->join();
     }
