@@ -147,33 +147,37 @@ jobs:
             TS_SUFFIX="-zts"
           fi
 
+          archs="${{ matrix.arch }}"
+          if [ "${{ matrix.arch }}" = "aarch64" ]; then
+            archs="aarch64 arm64"
+          fi
+
+          for arch in $archs; do
+            name="php_typst-${VERSION}_php${{ matrix.php }}-${arch}-${{ matrix.platform }}-${{ matrix.libc }}${TS_SUFFIX}"
+            staging="_release/${name}"
+            mkdir -p "${staging}"
+            cp "target/release/${{ matrix.ext-file }}" "${staging}/${{ matrix.so-name }}"
+            ( cd _release && zip -r "${name}.zip" "${name}" )
+          done
+
+          # Name used for the (unique) CI artifact of this job.
           PKG_NAME="php_typst-${VERSION}_php${{ matrix.php }}-${{ matrix.arch }}-${{ matrix.platform }}-${{ matrix.libc }}${TS_SUFFIX}"
-          STAGING="_release/${PKG_NAME}"
-          mkdir -p "${STAGING}"
-
-          cp "target/release/${{ matrix.ext-file }}" "${STAGING}/${{ matrix.so-name }}"
-
-          cd _release
-          zip -r "${PKG_NAME}.zip" "${PKG_NAME}"
-          cd ..
-
           echo "PKG_NAME=${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
-          echo "PKG_PATH=_release/${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
-          subject-path: ${{ steps.package.outputs.PKG_PATH }}
+          subject-path: _release/*.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.PKG_NAME }}
-          path: ${{ steps.package.outputs.PKG_PATH }}
+          path: _release/*.zip
 
       - name: Upload to release
         if: needs.metadata.outputs.is-release == 'true'
-        run: gh release upload "${{ github.ref_name }}" "${{ steps.package.outputs.PKG_PATH }}" --clobber
+        run: gh release upload "${{ github.ref_name }}" _release/*.zip --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
