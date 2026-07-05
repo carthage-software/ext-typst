@@ -1,0 +1,31 @@
+{
+  "name": "carthage-software/ext-typst-stubs",
+  "description": "IDE and static analysis stubs for ext-typst, the Typst typesetting engine for PHP.",
+  "type": "library",
+  "license": [
+    "MIT",
+    "Apache-2.0"
+  ],
+  "keywords": [
+    "typst",
+    "stubs",
+    "ide",
+    "phpstan",
+    "psalm",
+    "static-analysis",
+    "typesetting"
+  ],
+  "homepage": "https://ext-typst.carthage.software",
+  "support": {
+    "issues": "https://github.com/carthage-software/ext-typst/issues",
+    "source": "https://github.com/carthage-software/ext-typst"
+  },
+  "require": {
+    "php": "~8.3.0 || ~8.4.0 || ~8.5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Typst\\": "stubs/Typst/"
+    }
+  }
+}

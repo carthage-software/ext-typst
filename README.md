@@ -25,10 +25,10 @@ extension=/path/to/typst.so
 ### IDE & static analysis stubs
 
 ```bash
-composer require --dev carthage-software/ext-typst
+composer require --dev carthage-software/ext-typst-stubs
 ```
 
-Enables autocompletion in PhpStorm and support for Mago, PHPStan, and Psalm.
+Enables autocompletion in PhpStorm and Mago out of the box. For PHPStan or Psalm, point them at the stub directory. See the [stubs package](https://github.com/carthage-software/ext-typst-stubs#what-this-gives-you) for the exact config. Each tag matches the corresponding extension release.
 
 ## Quick Start
 

@@ -1,0 +1,62 @@
+name: Sync stubs
+
+on:
+  push:
+    branches: [main]
+    tags: ["*"]
+  workflow_dispatch:
+
+concurrency:
+  group: sync-stubs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Mirror stubs to ext-typst-stubs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ext-typst
+        uses: actions/checkout@v7
+
+      - name: Checkout ext-typst-stubs
+        uses: actions/checkout@v7
+        with:
+          repository: carthage-software/ext-typst-stubs
+          path: mirror
+          ssh-key: ${{ secrets.STUBS_DEPLOY_KEY }}
+          fetch-depth: 0
+
+      - name: Assemble the stubs package
+        run: |
+          # Mirror the stubs exactly (deletes files removed upstream).
+          rsync -a --delete stubs/ mirror/stubs/
+          # Package metadata is sourced from this repo too, so the mirror
+          # owns nothing of its own.
+          cp dist/stubs-package/composer.json mirror/composer.json
+          cp dist/stubs-package/README.md mirror/README.md
+          cp LICENSE-MIT LICENSE-APACHE mirror/
+
+      - name: Commit and push if changed
+        working-directory: mirror
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Stubs already up to date; nothing to mirror."
+          else
+            git commit -m "Mirror stubs from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+            git push origin HEAD:main
+          fi
+
+      - name: Mirror the release tag
+        if: github.ref_type == 'tag'
+        working-directory: mirror
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "Tag ${TAG} already exists on the mirror; leaving it untouched."
+          else
+            git tag "${TAG}"
+            git push origin "refs/tags/${TAG}"
+          fi
