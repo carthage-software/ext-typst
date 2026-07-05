@@ -18,7 +18,9 @@ release-musl php_version="8.4":
       apk add --no-cache bash build-base clang16-libclang curl git linux-headers openssl &&
       curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal &&
       . "$HOME/.cargo/env" &&
-      LIBCLANG_PATH=/usr/lib/llvm16/lib cargo build --release
+      export LIBCLANG_PATH=/usr/lib/llvm16/lib &&
+      export BINDGEN_EXTRA_CLANG_ARGS=-I/usr/lib/llvm16/lib/clang/16/include &&
+      cargo build --release
     '
 
 # Run all tests

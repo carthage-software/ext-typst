@@ -128,6 +128,7 @@ jobs:
 
     env:
       LIBCLANG_PATH: /usr/lib/llvm16/lib
+      BINDGEN_EXTRA_CLANG_ARGS: -I/usr/lib/llvm16/lib/clang/16/include
 
     steps:
       - name: Install Alpine dependencies
@@ -138,6 +139,7 @@ jobs:
             clang16-libclang \
             curl \
             git \
+            lexbor-dev \
             libxml2-dev \
             linux-headers \
             oniguruma-dev \
