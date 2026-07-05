@@ -23,7 +23,7 @@ jobs:
     name: Extract metadata
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Extract version
         id: version
@@ -51,7 +51,7 @@ jobs:
     needs: metadata
     if: needs.metadata.outputs.is-release == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Create draft release
         run: |
@@ -97,7 +97,7 @@ jobs:
             so-name: typst.so
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
 
@@ -166,12 +166,12 @@ jobs:
           echo "PKG_NAME=${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: _release/*.zip
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.package.outputs.PKG_NAME }}
           path: _release/*.zip
@@ -215,7 +215,7 @@ jobs:
             openssl \
             zip
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
 
@@ -261,12 +261,12 @@ jobs:
           echo "PKG_PATH=_release/${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: ${{ steps.package.outputs.PKG_PATH }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.package.outputs.PKG_NAME }}
           path: ${{ steps.package.outputs.PKG_PATH }}
@@ -283,7 +283,7 @@ jobs:
     needs: [metadata, build, build-musl]
     if: needs.metadata.outputs.is-release == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Publish release
         run: gh release edit "${{ github.ref_name }}" --draft=false
