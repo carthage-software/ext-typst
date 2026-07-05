@@ -11,6 +11,15 @@ build:
 release:
     cargo build --release
 
+# Build the extension in an Alpine Linux musl container
+release-musl php_version="8.4":
+    docker run --rm -v "$PWD:/app" -w /app php:{{php_version}}-cli-alpine sh -lc '
+      apk add --no-cache bash build-base clang16-libclang curl git linux-headers openssl &&
+      curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal &&
+      . "$HOME/.cargo/env" &&
+      LIBCLANG_PATH=/usr/lib/llvm16/lib cargo build --release
+    '
+
 # Run all tests
 test: build
     php -d extension={{ext_debug}} vendor/bin/phpunit
