@@ -273,7 +273,7 @@ jobs:
 
       - name: Upload to release
         if: needs.metadata.outputs.is-release == 'true'
-        run: gh release upload "${{ github.ref_name }}" "${{ steps.package.outputs.PKG_PATH }}" --clobber
+        run: gh release upload "${{ github.ref_name }}" "${{ steps.package.outputs.PKG_PATH }}" --clobber --repo "${{ github.repository }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
