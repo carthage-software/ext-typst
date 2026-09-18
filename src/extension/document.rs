@@ -175,7 +175,9 @@ impl Document {
             ImageFormat::Jpeg => {
                 let rgba = pixmap.data();
                 let rgb: Vec<u8> = rgba
-                    .chunks_exact(4)
+                    .as_chunks::<4>()
+                    .0
+                    .iter()
                     .flat_map(|px| [px[0], px[1], px[2]])
                     .collect();
 
