@@ -22,6 +22,12 @@ Download the ZIP for your platform from [GitHub Releases](https://github.com/car
 extension=/path/to/typst.so
 ```
 
+On Alpine, install the runtime library before loading the extension:
+
+```bash
+apk add --no-cache libgcc
+```
+
 ### IDE & static analysis stubs
 
 ```bash
@@ -54,13 +60,15 @@ See the full documentation at [ext-typst.carthage.software](https://ext-typst.ca
 
 ## Supported Platforms
 
-| Platform | Architecture |
-| -------- | ------------ |
-| Linux    | x86_64       |
-| Linux    | aarch64      |
-| macOS    | arm64        |
+| Platform             | Architecture          | Thread safety |
+| -------------------- | --------------------- | ------------- |
+| Linux (glibc)        | x86_64, aarch64/arm64  | NTS, ZTS      |
+| Linux (musl/Alpine)  | x86_64, aarch64/arm64  | NTS           |
+| macOS                | arm64                 | NTS, ZTS      |
 
 PHP 8.3, 8.4, and 8.5 are supported.
+
+For Alpine on ARM64, use the `php_typst-{version}_php{php version}-aarch64-linux-musl.zip` archive. The `arm64-linux-musl` archive contains the same build.
 
 ## Development
 

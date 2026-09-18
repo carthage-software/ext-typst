@@ -183,97 +183,99 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-musl:
-    name: PHP ${{ matrix.php }}-nts (linux-x86_64-musl)
-    runs-on: ubuntu-latest
+    name: PHP ${{ matrix.php }}-nts (linux-${{ matrix.arch }}-musl)
+    runs-on: ${{ matrix.os }}
     needs: [metadata, create-release]
     if: always() && needs.metadata.result == 'success' && (needs.create-release.result == 'success' || needs.create-release.result == 'skipped')
-    container:
-      image: php:${{ matrix.php }}-cli-alpine
-    defaults:
-      run:
-        shell: sh
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
         php: ["8.3", "8.4", "8.5"]
-
-    env:
-      LIBCLANG_PATH: /usr/lib/llvm16/lib
-      BINDGEN_EXTRA_CLANG_ARGS: -I/usr/lib/llvm16/lib/clang/16/include
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
 
     steps:
-      - name: Install build dependencies
-        run: |
-          apk add --no-cache \
-            bash \
-            build-base \
-            clang16-libclang \
-            curl \
-            git \
-            github-cli \
-            linux-headers \
-            openssl \
-            zip
-
       - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
 
       - uses: Swatinem/rust-cache@v2
         with:
-          key: release-musl-php${{ matrix.php }}-nts
+          key: release-musl-${{ matrix.arch }}-php${{ matrix.php }}-nts
 
-      - name: Verify PHP thread safety
+      # JavaScript actions cannot run in ARM64 Alpine job containers.
+      - name: Build and verify extension in Alpine
         run: |
+          mkdir -p target "$HOME/.cargo/registry"
+          trap 'sudo chown -R "$(id -u):$(id -g)" target "$HOME/.cargo/registry"' EXIT
+          docker run --rm -i \
+            -v "$GITHUB_WORKSPACE:/app" \
+            -v "$HOME/.cargo/registry:/root/.cargo/registry" \
+            -w /app -e CARGO_TERM_COLOR \
+            php:${{ matrix.php }}-cli-alpine sh -eu <<'SH'
+          apk add --no-cache bash build-base clang16-libclang curl git linux-headers openssl
+          curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+          . "$HOME/.cargo/env"
+          export LIBCLANG_PATH=/usr/lib/llvm16/lib
+          export BINDGEN_EXTRA_CLANG_ARGS=-I/usr/lib/llvm16/lib/clang/16/include
+
           actual=$(php -r "echo PHP_ZTS ? 'ts' : 'nts';")
           if [ "nts" != "$actual" ]; then
             echo "::error::Expected PHP nts but got $actual"
             exit 1
           fi
 
-      - name: Build extension
-        run: cargo build --release
+          cargo build --release
+          ldd target/release/libext_typst.so || true
+          SH
 
-      - name: Inspect linked libraries
-        run: ldd target/release/libext_typst.so || true
-
-      - name: Verify extension loads
-        run: |
+          docker run --rm -i \
+            -v "$GITHUB_WORKSPACE:/app:ro" \
+            -w /app php:${{ matrix.php }}-cli-alpine sh -eu <<'SH'
+          apk add --no-cache libgcc
           php -d display_startup_errors=1 \
-            -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
+            -d "extension=$PWD/target/release/libext_typst.so" \
             -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
+          SH
 
       - name: Package binary
         id: package
         run: |
           VERSION="${{ needs.metadata.outputs.version }}"
-          PKG_NAME="php_typst-${VERSION}_php${{ matrix.php }}-x86_64-linux-musl"
-          STAGING="_release/${PKG_NAME}"
-          mkdir -p "${STAGING}"
+          archs="${{ matrix.arch }}"
+          if [ "${{ matrix.arch }}" = "aarch64" ]; then
+            archs="aarch64 arm64"
+          fi
 
-          cp "target/release/libext_typst.so" "${STAGING}/typst.so"
+          for arch in $archs; do
+            name="php_typst-${VERSION}_php${{ matrix.php }}-${arch}-linux-musl"
+            staging="_release/${name}"
+            mkdir -p "${staging}"
+            cp "target/release/libext_typst.so" "${staging}/typst.so"
+            ( cd _release && zip -r "${name}.zip" "${name}" )
+          done
 
-          cd _release
-          zip -r "${PKG_NAME}.zip" "${PKG_NAME}"
-          cd ..
-
+          PKG_NAME="php_typst-${VERSION}_php${{ matrix.php }}-${{ matrix.arch }}-linux-musl"
           echo "PKG_NAME=${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
-          echo "PKG_PATH=_release/${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v4
         with:
-          subject-path: ${{ steps.package.outputs.PKG_PATH }}
+          subject-path: _release/*.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.package.outputs.PKG_NAME }}
-          path: ${{ steps.package.outputs.PKG_PATH }}
+          path: _release/*.zip
 
       - name: Upload to release
         if: needs.metadata.outputs.is-release == 'true'
-        run: gh release upload "${{ github.ref_name }}" "${{ steps.package.outputs.PKG_PATH }}" --clobber --repo "${{ github.repository }}"
+        run: gh release upload "${{ github.ref_name }}" _release/*.zip --clobber --repo "${{ github.repository }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

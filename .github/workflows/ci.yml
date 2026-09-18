@@ -114,22 +114,19 @@ jobs:
             vendor/bin/phpunit
 
   build-musl:
-    name: PHP ${{ matrix.php }}-nts (linux-x86_64-musl)
+    name: PHP ${{ matrix.php }}-nts (linux-${{ matrix.arch }}-musl)
     needs: checks
-    runs-on: ubuntu-latest
-    container:
-      image: php:${{ matrix.php }}-cli-alpine
-    defaults:
-      run:
-        shell: sh
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
         php: ["8.3", "8.4", "8.5"]
-
-    env:
-      LIBCLANG_PATH: /usr/lib/llvm16/lib
-      BINDGEN_EXTRA_CLANG_ARGS: -I/usr/lib/llvm16/lib/clang/16/include
+        include:
+          - os: ubuntu-latest
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            arch: aarch64
 
     # This job only verifies that the extension compiles and loads under musl.
     # The PHPUnit suite runs on the glibc `build` matrix instead: the extension
@@ -137,41 +134,45 @@ jobs:
     # dev dependencies' PHP extensions (bcmath, intl, sodium, brotli via PSL)
     # plus a newer lexbor than Alpine ships for PHP 8.5's ext/dom.
     steps:
-      - name: Install build dependencies
-        run: |
-          apk add --no-cache \
-            bash \
-            build-base \
-            clang16-libclang \
-            curl \
-            git \
-            linux-headers \
-            openssl
-
       - uses: actions/checkout@v7
 
       - uses: dtolnay/rust-toolchain@stable
 
       - uses: Swatinem/rust-cache@v2
         with:
-          key: musl-php${{ matrix.php }}-nts
+          key: musl-${{ matrix.arch }}-php${{ matrix.php }}-nts
 
-      - name: Verify PHP thread safety
+      # JavaScript actions cannot run in ARM64 Alpine job containers.
+      - name: Build and verify extension in Alpine
         run: |
+          mkdir -p target "$HOME/.cargo/registry"
+          trap 'sudo chown -R "$(id -u):$(id -g)" target "$HOME/.cargo/registry"' EXIT
+          docker run --rm -i \
+            -v "$GITHUB_WORKSPACE:/app" \
+            -v "$HOME/.cargo/registry:/root/.cargo/registry" \
+            -w /app -e CARGO_TERM_COLOR \
+            php:${{ matrix.php }}-cli-alpine sh -eu <<'SH'
+          apk add --no-cache bash build-base clang16-libclang curl git linux-headers openssl
+          curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+          . "$HOME/.cargo/env"
+          export LIBCLANG_PATH=/usr/lib/llvm16/lib
+          export BINDGEN_EXTRA_CLANG_ARGS=-I/usr/lib/llvm16/lib/clang/16/include
+
           actual=$(php -r "echo PHP_ZTS ? 'ts' : 'nts';")
           if [ "nts" != "$actual" ]; then
             echo "::error::Expected PHP nts but got $actual"
             exit 1
           fi
 
-      - name: Build extension
-        run: cargo build --release
+          cargo build --release
+          ldd target/release/libext_typst.so || true
+          SH
 
-      - name: Inspect linked libraries
-        run: ldd target/release/libext_typst.so || true
-
-      - name: Verify extension loads
-        run: |
+          docker run --rm -i \
+            -v "$GITHUB_WORKSPACE:/app:ro" \
+            -w /app php:${{ matrix.php }}-cli-alpine sh -eu <<'SH'
+          apk add --no-cache libgcc
           php -d display_startup_errors=1 \
-            -d "extension=$GITHUB_WORKSPACE/target/release/libext_typst.so" \
+            -d "extension=$PWD/target/release/libext_typst.so" \
             -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
+          SH
