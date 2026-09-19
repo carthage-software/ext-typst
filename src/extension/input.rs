@@ -100,6 +100,7 @@ fn array_key_to_string(key: &ArrayKey<'_>) -> String {
         ArrayKey::Long(i) => i.to_string(),
         ArrayKey::String(s) => s.clone(),
         ArrayKey::Str(s) => s.to_string(),
+        ArrayKey::ZendString(z) => String::from_utf8_lossy(z.as_bytes()).into_owned(),
     }
 }
 
