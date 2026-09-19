@@ -16,6 +16,5 @@ try {
             RuntimeException::COMPILATION_FAILED => "Compilation error: {$e->getMessage()}\n",
             RuntimeException::FILE_NOT_FOUND => "File not found: {$e->getMessage()}\n",
             default => "Error: {$e->getMessage()}\n",
-        }
-    ;
+        };
 }
