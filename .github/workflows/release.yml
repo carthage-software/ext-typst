@@ -125,11 +125,11 @@ jobs:
       - name: Build extension
         run: cargo build --release
 
-      - name: Verify extension loads
+      - name: Run smoke test
         run: |
           php -d display_startup_errors=1 \
             -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext-file }}" \
-            -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
+            tests/smoke.php
 
       - name: Install Composer dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
@@ -239,7 +239,7 @@ jobs:
           apk add --no-cache libgcc
           php -d display_startup_errors=1 \
             -d "extension=$PWD/target/release/libext_typst.so" \
-            -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
+            tests/smoke.php
           SH
 
       - name: Package binary

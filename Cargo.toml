@@ -8,7 +8,8 @@ license = "MIT OR Apache-2.0"
 crate-type = ["cdylib"]
 
 [dependencies]
-ext-php-rs = { version = "0.15.6", features = ["enum"] }
+# Keep the version tested in 0.2.0: newer releases break enum lifetimes and readonly properties.
+ext-php-rs = { version = "=0.15.6", features = ["enum"] }
 typst = "0.14.2"
 typst-pdf = "0.14.2"
 typst-render = "0.14.2"

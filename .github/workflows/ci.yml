@@ -99,11 +99,11 @@ jobs:
       - name: Build extension
         run: cargo build --release
 
-      - name: Verify extension loads
+      - name: Run smoke test
         run: |
           php -d display_startup_errors=1 \
             -d "extension=$GITHUB_WORKSPACE/target/release/${{ matrix.ext }}" \
-            -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
+            tests/smoke.php
 
       - name: Install Composer dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
@@ -128,11 +128,6 @@ jobs:
           - os: ubuntu-24.04-arm
             arch: aarch64
 
-    # This job only verifies that the extension compiles and loads under musl.
-    # The PHPUnit suite runs on the glibc `build` matrix instead: the extension
-    # logic is libc-independent, and running the suite here would require the
-    # dev dependencies' PHP extensions (bcmath, intl, sodium, brotli via PSL)
-    # plus a newer lexbor than Alpine ships for PHP 8.5's ext/dom.
     steps:
       - uses: actions/checkout@v7
 
@@ -174,5 +169,5 @@ jobs:
           apk add --no-cache libgcc
           php -d display_startup_errors=1 \
             -d "extension=$PWD/target/release/libext_typst.so" \
-            -r 'if (!extension_loaded("typst")) { fwrite(STDERR, "error: typst extension failed to load\n"); exit(1); } echo "typst extension loaded\n";'
+            tests/smoke.php
           SH
