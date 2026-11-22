@@ -18,6 +18,9 @@ static NEXT_WORLD_ID: AtomicI64 = AtomicI64::new(1);
 ///
 /// The compilation environment: manages fonts, source loading, and configuration.
 /// Shared across `Compiler` and `Inspector` instances.
+///
+/// `Clone` shares the font state; use `clone_from` for an independent copy.
+#[derive(Clone)]
 #[php_class]
 #[php(name = "Typst\\World")]
 #[php(flags = ClassFlags::Final)]

@@ -51,7 +51,7 @@ impl Compiler {
 
         Self {
             world: typst_world,
-            php_world: World::clone_from(world),
+            php_world: world.clone(),
         }
     }
 

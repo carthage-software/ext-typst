@@ -162,6 +162,22 @@ final class WorldTest extends TestCase
         static::assertSame(1, $doc->pageCount());
     }
 
+    public function testFontAddedAfterCompilerIsSharedEverywhere(): void
+    {
+        $world = new World();
+        $compiler = new Compiler($world);
+        $world->addFontFile(__DIR__ . '/fixtures/fonts/Roboto/static/Roboto-Regular.ttf');
+
+        static::assertContains('Roboto', $compiler->getWorld()->getFontFamilies());
+
+        $source = $world->loadString(
+            "#set page(width: auto, height: auto)\n#set text(font: \"Roboto\", fallback: false)\nHello",
+        );
+        $sync = $compiler->compile($source);
+        $async = $compiler->compileInBackground($source)->join();
+        static::assertSame($sync->pageWidth(), $async->pageWidth());
+    }
+
     public function testAddFontFileNonExistentThrows(): void
     {
         $world = new World();

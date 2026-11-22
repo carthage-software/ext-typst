@@ -58,7 +58,7 @@ unsafe extern "C" fn clone_compiler(object: *mut ZendObject) -> *mut ZendObject 
     let class_obj = ZendClassObject::<Compiler>::from_zend_obj(obj).unwrap();
     let original = &**class_obj;
 
-    let php_world = World::clone_from(original.php_world());
+    let php_world = original.php_world().clone();
     let fi = original.typst_world().font_inner();
     let world = TypstWorld::new(
         php_world.configured_root().to_owned(),
@@ -76,7 +76,7 @@ unsafe extern "C" fn clone_inspector(object: *mut ZendObject) -> *mut ZendObject
     let class_obj = ZendClassObject::<Inspector>::from_zend_obj(obj).unwrap();
     let original = &**class_obj;
 
-    let php_world = World::clone_from(original.php_world());
+    let php_world = original.php_world().clone();
     let fi = original.typst_world().font_inner();
     let world = TypstWorld::new(
         php_world.configured_root().to_owned(),
