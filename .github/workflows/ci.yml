@@ -68,7 +68,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm, macos-14]
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-15]
         php: ["8.3", "8.4", "8.5", "8.6"]
         ts: [nts, ts]
         include:
@@ -78,7 +78,7 @@ jobs:
           - os: ubuntu-24.04-arm
             name: linux-aarch64
             ext: libext_typst.so
-          - os: macos-14
+          - os: macos-15
             name: darwin-arm64
             ext: libext_typst.dylib
 
