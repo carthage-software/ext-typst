@@ -84,8 +84,7 @@ impl Diagnostic {
         let location = self
             .span
             .as_ref()
-            .map(|s| format!(" (at {}:{}:{})", s.file, s.line, s.column))
-            .unwrap_or_default();
+            .map_or_default(|s| format!(" (at {}:{}:{})", s.file, s.line, s.column));
 
         format!("{severity_str}: {}{location}", self.message)
     }
