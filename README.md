@@ -66,7 +66,7 @@ See the full documentation at [ext-typst.carthage.software](https://ext-typst.ca
 | Linux (musl/Alpine)  | x86_64, aarch64/arm64  | NTS           |
 | macOS                | arm64                 | NTS, ZTS      |
 
-PHP 8.3, 8.4, and 8.5 are supported.
+PHP 8.3, 8.4, 8.5, and 8.6 are supported.
 
 For Alpine on ARM64, use the `php_typst-{version}_php{php version}-aarch64-linux-musl.zip` archive. The `arm64-linux-musl` archive contains the same build.
 
