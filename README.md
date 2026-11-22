@@ -63,7 +63,7 @@ See the full documentation at [ext-typst.carthage.software](https://ext-typst.ca
 | Platform             | Architecture          | Thread safety |
 | -------------------- | --------------------- | ------------- |
 | Linux (glibc)        | x86_64, aarch64/arm64  | NTS, ZTS      |
-| Linux (musl/Alpine)  | x86_64, aarch64/arm64  | NTS           |
+| Linux (musl/Alpine)  | x86_64, aarch64/arm64  | NTS (ZTS on 8.6) |
 | macOS                | arm64                 | NTS, ZTS      |
 
 PHP 8.3, 8.4, 8.5, and 8.6 are supported.

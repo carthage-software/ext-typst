@@ -43,10 +43,10 @@ apk add --no-cache libgcc
 | Platform             | Architecture          | Thread safety |
 | -------------------- | --------------------- | ------------- |
 | Linux (glibc)        | x86_64, aarch64/arm64  | NTS, ZTS      |
-| Linux (musl/Alpine)  | x86_64, aarch64/arm64  | NTS           |
+| Linux (musl/Alpine)  | x86_64, aarch64/arm64  | NTS (ZTS on 8.6) |
 | macOS                | arm64                 | NTS, ZTS      |
 
-PHP 8.3, 8.4, 8.5, and 8.6 are supported. Musl builds support NTS only.
+PHP 8.3, 8.4, 8.5, and 8.6 are supported. Musl builds are NTS, except PHP 8.6, which is ZTS because the official PHP 8.6 Docker images are.
 
 For Alpine on ARM64, use the `php_typst-{version}_php{php version}-aarch64-linux-musl.zip` archive. The `arm64-linux-musl` archive contains the same build.
 
