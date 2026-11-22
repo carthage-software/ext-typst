@@ -109,5 +109,5 @@ fn clone_into_new<T: RegisteredClass>(source: *mut ZendObject, value: T) -> *mut
     let raw = new.into_raw();
     // SAFETY: `raw` is a valid pointer to a ZendClassObject<T>;
     // we return a pointer to its embedded `std` (ZendObject) field.
-    (&raw mut raw.std).cast::<ZendObject>()
+    unsafe { (&raw mut (*raw).std).cast::<ZendObject>() }
 }

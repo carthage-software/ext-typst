@@ -54,7 +54,6 @@ impl Inspector {
         }
     }
 
-    #[php(defaults(inputs = None))]
     pub fn inspect(
         &mut self,
         source: &Source,
@@ -68,7 +67,6 @@ impl Inspector {
     }
 
     #[php(name = "inspectString")]
-    #[php(defaults(inputs = None))]
     pub fn inspect_string(
         &mut self,
         input: String,
@@ -83,7 +81,6 @@ impl Inspector {
     }
 
     #[php(name = "inspectFile")]
-    #[php(defaults(inputs = None))]
     pub fn inspect_file(
         &mut self,
         path: &str,

@@ -8,8 +8,8 @@ license = "MIT OR Apache-2.0"
 crate-type = ["cdylib"]
 
 [dependencies]
-# Keep the version tested in 0.2.0: newer releases break enum lifetimes and readonly properties.
-ext-php-rs = { version = "=0.15.6", features = ["enum"] }
+# Pinned: upgrades have broken enum lifetimes and readonly properties before. Run tests/smoke.php after bumping.
+ext-php-rs = { version = "=0.16.5", features = ["enum"] }
 typst = "0.14.2"
 typst-pdf = "0.14.2"
 typst-render = "0.14.2"
@@ -21,7 +21,7 @@ parking_lot = "0.12.5"
 chrono = "0.4"
 
 [build-dependencies]
-ext-php-rs-build = "0.1.1"
+ext-php-rs-build = "0.2.1"
 
 [lints.clippy]
 pedantic = { level = "warn" }

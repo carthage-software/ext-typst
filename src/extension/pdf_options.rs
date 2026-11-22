@@ -16,19 +16,12 @@ use super::error;
 #[php(readonly)]
 #[derive(Clone)]
 pub struct PdfOptions {
-    #[php(prop)]
     pub identifier: Option<String>,
-    #[php(prop)]
     pub timestamp: Option<i64>,
-    #[php(prop)]
     pub first_page: Option<i64>,
-    #[php(prop)]
     pub last_page: Option<i64>,
-    #[php(prop)]
     pub version: Option<PdfVersion>,
-    #[php(prop)]
     pub validator: Option<PdfValidator>,
-    #[php(prop)]
     pub tagged: bool,
 }
 
@@ -39,8 +32,6 @@ impl PdfOptions {
         timestamp = None,
         first_page = None,
         last_page = None,
-        version = None,
-        validator = None,
         tagged = None
     ))]
     pub fn __construct(

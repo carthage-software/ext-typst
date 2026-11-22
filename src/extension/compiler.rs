@@ -56,7 +56,6 @@ impl Compiler {
     }
 
     #[php(name = "compile")]
-    #[php(defaults(inputs = None))]
     pub fn php_compile(
         &mut self,
         source: &Source,
@@ -70,7 +69,6 @@ impl Compiler {
     }
 
     #[php(name = "compileString")]
-    #[php(defaults(inputs = None))]
     pub fn compile_string(
         &mut self,
         input: String,
@@ -85,7 +83,6 @@ impl Compiler {
     }
 
     #[php(name = "compileFile")]
-    #[php(defaults(inputs = None))]
     pub fn compile_file(
         &mut self,
         path: &str,
@@ -115,7 +112,6 @@ impl Compiler {
     }
 
     #[php(name = "compileInBackground")]
-    #[php(defaults(inputs = None))]
     pub fn compile_in_background(
         &self,
         source: &Source,

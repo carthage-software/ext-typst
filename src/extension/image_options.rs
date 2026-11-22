@@ -10,17 +10,14 @@ use super::error;
 #[php(readonly)]
 #[derive(Clone)]
 pub struct ImageOptions {
-    #[php(prop)]
     pub format: ImageFormat,
-    #[php(prop)]
     pub quality: u8,
-    #[php(prop)]
     pub dpi: f64,
 }
 
 #[php_impl]
 impl ImageOptions {
-    #[php(defaults(format = None, quality = None, dpi = None))]
+    #[php(defaults(quality = None, dpi = None))]
     pub fn __construct(
         format: Option<ImageFormat>,
         quality: Option<i64>,

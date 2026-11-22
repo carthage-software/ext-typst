@@ -61,7 +61,6 @@ impl Document {
         Ok(self.inner.pages[page_idx].frame.height().to_pt())
     }
 
-    #[php(defaults(options = None))]
     pub fn to_pdf(&self, options: Option<&PdfOptions>) -> PhpResult<Pdf> {
         let default_opts;
         let opts = if let Some(o) = options {
@@ -96,14 +95,13 @@ impl Document {
         Ok(Pdf::from_raw(data, page_count))
     }
 
-    #[php(defaults(page = None, options = None))]
+    #[php(defaults(page = None))]
     pub fn to_image(&self, page: Option<i64>, options: Option<&ImageOptions>) -> PhpResult<Image> {
         let (page_idx, _) = self.resolve_page(page)?;
         let opts = options.cloned().unwrap_or_default();
         self.render_page(&opts, page_idx)
     }
 
-    #[php(defaults(options = None))]
     pub fn to_images(&self, options: Option<&ImageOptions>) -> PhpResult<Vec<Image>> {
         let opts = options.cloned().unwrap_or_default();
         let mut images = Vec::with_capacity(self.inner.pages.len());
