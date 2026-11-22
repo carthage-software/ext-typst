@@ -164,7 +164,7 @@ impl TypstWorld {
     fn resolve_package(&self, spec: &PackageSpec) -> FileResult<PathBuf> {
         let package_dir = self.package_dir.as_ref().ok_or_else(|| {
             FileError::Package(PackageError::Other(Some(
-                "No package directory configured. Set packageDir in SourceResolver.".into(),
+                "No package directory configured. Pass package_dir to Typst\\World.".into(),
             )))
         })?;
 
