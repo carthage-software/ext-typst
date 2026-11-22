@@ -138,7 +138,7 @@ jobs:
             vendor/bin/phpunit
 
   build-musl:
-    name: PHP ${{ matrix.php }}-nts (linux-${{ matrix.arch }}-musl)
+    name: PHP ${{ matrix.php }}-${{ matrix.ts || 'nts' }} (linux-${{ matrix.arch }}-musl)
     needs: checks
     runs-on: ${{ matrix.os }}
     strategy:
@@ -151,6 +151,9 @@ jobs:
             arch: x86_64
           - os: ubuntu-24.04-arm
             arch: aarch64
+          # The official PHP 8.6 images are ZTS only.
+          - php: "8.6"
+            ts: ts
 
     steps:
       - uses: actions/checkout@v7
@@ -159,7 +162,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          key: musl-${{ matrix.arch }}-php${{ matrix.php }}-nts
+          key: musl-${{ matrix.arch }}-php${{ matrix.php }}-${{ matrix.ts || 'nts' }}
 
       # JavaScript actions cannot run in ARM64 Alpine job containers.
       - name: Build and verify extension in Alpine
@@ -178,8 +181,8 @@ jobs:
           export BINDGEN_EXTRA_CLANG_ARGS=-I/usr/lib/llvm16/lib/clang/16/include
 
           actual=$(php -r "echo PHP_ZTS ? 'ts' : 'nts';")
-          if [ "nts" != "$actual" ]; then
-            echo "::error::Expected PHP nts but got $actual"
+          if [ "${{ matrix.ts || 'nts' }}" != "$actual" ]; then
+            echo "::error::Expected PHP ${{ matrix.ts || 'nts' }} but got $actual"
             exit 1
           fi
 

@@ -195,7 +195,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-musl:
-    name: PHP ${{ matrix.php }}-nts (linux-${{ matrix.arch }}-musl)
+    name: PHP ${{ matrix.php }}-${{ matrix.ts || 'nts' }} (linux-${{ matrix.arch }}-musl)
     runs-on: ${{ matrix.os }}
     needs: [metadata, create-release]
     if: always() && needs.metadata.result == 'success' && (needs.create-release.result == 'success' || needs.create-release.result == 'skipped')
@@ -209,6 +209,9 @@ jobs:
             arch: x86_64
           - os: ubuntu-24.04-arm
             arch: aarch64
+          # The official PHP 8.6 images are ZTS only.
+          - php: "8.6"
+            ts: ts
 
     steps:
       - uses: actions/checkout@v7
@@ -217,7 +220,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          key: release-musl-${{ matrix.arch }}-php${{ matrix.php }}-nts
+          key: release-musl-${{ matrix.arch }}-php${{ matrix.php }}-${{ matrix.ts || 'nts' }}
 
       # JavaScript actions cannot run in ARM64 Alpine job containers.
       - name: Build and verify extension in Alpine
@@ -236,8 +239,8 @@ jobs:
           export BINDGEN_EXTRA_CLANG_ARGS=-I/usr/lib/llvm16/lib/clang/16/include
 
           actual=$(php -r "echo PHP_ZTS ? 'ts' : 'nts';")
-          if [ "nts" != "$actual" ]; then
-            echo "::error::Expected PHP nts but got $actual"
+          if [ "${{ matrix.ts || 'nts' }}" != "$actual" ]; then
+            echo "::error::Expected PHP ${{ matrix.ts || 'nts' }} but got $actual"
             exit 1
           fi
 
@@ -264,14 +267,14 @@ jobs:
           fi
 
           for arch in $archs; do
-            name="php_typst-${VERSION}_php${{ matrix.php }}-${arch}-linux-musl"
+            name="php_typst-${VERSION}_php${{ matrix.php }}-${arch}-linux-musl${{ matrix.ts && '-zts' || '' }}"
             staging="_release/${name}"
             mkdir -p "${staging}"
             cp "target/release/libext_typst.so" "${staging}/typst.so"
             ( cd _release && zip -r "${name}.zip" "${name}" )
           done
 
-          PKG_NAME="php_typst-${VERSION}_php${{ matrix.php }}-${{ matrix.arch }}-linux-musl"
+          PKG_NAME="php_typst-${VERSION}_php${{ matrix.php }}-${{ matrix.arch }}-linux-musl${{ matrix.ts && '-zts' || '' }}"
           echo "PKG_NAME=${PKG_NAME}.zip" >> "$GITHUB_OUTPUT"
 
       - name: Generate artifact attestation
