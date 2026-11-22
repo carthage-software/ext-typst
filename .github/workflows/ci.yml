@@ -34,6 +34,18 @@ jobs:
       - name: Install Composer dependencies
         run: composer update --no-interaction --prefer-dist --ignore-platform-req=ext-typst
 
+      # ext-php-rs 0.16.5 can pair one LLVM's libclang with another's clang headers.
+      - name: Use one LLVM for bindgen
+        if: runner.os == 'Linux'
+        run: |
+          for dir in $(ls -d /usr/lib/llvm-* | sort -V -r); do
+            if [ -x "$dir/bin/clang" ] && compgen -G "$dir/lib/libclang*.so*" > /dev/null; then
+              echo "LIBCLANG_PATH=$dir/lib" >> "$GITHUB_ENV"
+              echo "CLANG_PATH=$dir/bin/clang" >> "$GITHUB_ENV"
+              break
+            fi
+          done
+
       - name: Rust formatting
         run: cargo fmt -- --check
 
@@ -95,6 +107,18 @@ jobs:
             echo "::error::Expected PHP $expected but got $actual"
             exit 1
           fi
+
+      # ext-php-rs 0.16.5 can pair one LLVM's libclang with another's clang headers.
+      - name: Use one LLVM for bindgen
+        if: runner.os == 'Linux'
+        run: |
+          for dir in $(ls -d /usr/lib/llvm-* | sort -V -r); do
+            if [ -x "$dir/bin/clang" ] && compgen -G "$dir/lib/libclang*.so*" > /dev/null; then
+              echo "LIBCLANG_PATH=$dir/lib" >> "$GITHUB_ENV"
+              echo "CLANG_PATH=$dir/bin/clang" >> "$GITHUB_ENV"
+              break
+            fi
+          done
 
       - name: Build extension
         run: cargo build --release
