@@ -950,7 +950,7 @@ checksum = "efa29f09b08e644d5dc1e76a318f758afc9dccbe92ccf84b4778e0433a78eecc"
 
 [[package]]
 name = "ext-typst"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "chrono",
  "ext-php-rs",
